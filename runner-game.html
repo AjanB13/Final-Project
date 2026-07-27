@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frutex Runner — Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-card: #16161f;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0b0;
+      --gold: #d4a843;
+      --gold-light: #e8c96a;
+      --gold-dark: #b8922e;
+      --max-width: 1200px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      overflow-x: hidden;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(10,10,15,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-inner {
+      max-width: var(--max-width); margin: 0 auto; padding: 0 2rem;
+      display: flex; align-items: center; justify-content: space-between; height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900;
+      color: var(--gold); letter-spacing: 1px; text-decoration: none;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-secondary); text-decoration: none; font-size: 0.9rem;
+      font-weight: 500; transition: color var(--transition); letter-spacing: 0.3px;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--gold-light); }
+    .nav-links a.active { border-bottom: 2px solid var(--gold); padding-bottom: 2px; }
+
+    .game-wrapper {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 80px 1rem 2rem;
+    }
+    .game-header {
+      text-align: center; margin-bottom: 1.5rem;
+    }
+    .game-header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 5vw, 2.5rem);
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .game-header p { color: var(--text-secondary); font-size: 0.9rem; }
+
+    .game-container {
+      position: relative;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    canvas { display: block; }
+
+    .game-hud {
+      position: absolute; top: 16px; left: 0; right: 0;
+      display: flex; justify-content: space-between;
+      padding: 0 24px; pointer-events: none;
+    }
+    .hud-score {
+      font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 800;
+      color: var(--gold);
+      text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+    }
+    .hud-best {
+      font-size: 0.8rem; color: var(--text-muted);
+    }
+
+    .game-overlay {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: rgba(10,10,15,0.7); pointer-events: none; opacity: 0;
+      transition: opacity 0.4s;
+    }
+    .game-overlay.show { opacity: 1; pointer-events: all; }
+    .game-overlay h2 {
+      font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--gold);
+      margin-bottom: 0.5rem;
+    }
+    .game-overlay .final-score {
+      font-size: 1.1rem; color: var(--text-secondary); margin-bottom: 1.5rem;
+    }
+    .game-overlay .final-score span { color: var(--gold-light); font-weight: 700; }
+    .btn-restart, .btn-start {
+      padding: 0.8rem 2rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0a0a0f; font-weight: 700; font-size: 1rem;
+      border: none; border-radius: 100px; cursor: pointer;
+      transition: transform var(--transition), box-shadow var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .btn-restart:hover, .btn-start:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(212,168,67,0.3);
+    }
+    .controls-hint {
+      font-size: 0.75rem; color: var(--text-muted); margin-top: 1rem;
+    }
+
+    footer {
+      text-align: center; padding: 1.5rem;
+      color: var(--text-muted); font-size: 0.75rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">FRUTEX</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#products">Products</a></li>
+        <li><a href="golden-eagle.html">Flavours</a></li>
+        <li><a href="runner-game.html" class="active">Game</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="game-wrapper">
+    <div class="game-header">
+      <h1>Golden Eagle Runner</h1>
+      <p>Dodge the crates — how far can you run?</p>
+    </div>
+
+    <div class="game-container" style="width:100%;max-width:800px;">
+      <canvas id="game"></canvas>
+      <div class="game-overlay" id="overlayStart">
+        <h2 style="font-size:1.6rem;">Golden Eagle Runner</h2>
+        <p style="color:var(--text-secondary);margin-bottom:1.5rem;">Press SPACE or tap to jump over crates</p>
+        <button class="btn-start" onclick="startGame()">Start Running</button>
+      </div>
+      <div class="game-overlay" id="overlayEnd">
+        <h2>Game Over</h2>
+        <p class="final-score">Score: <span id="finalScore">0</span></p>
+        <button class="btn-restart" onclick="startGame()">Run Again</button>
+      </div>
+    </div>
+    <p class="controls-hint">SPACE / Click / Tap to jump &bull; Double-tap for double jump</p>
+  </div>
+
+  <footer>&copy; 2026 Frutex Beverages &bull; Golden Eagle Runner</footer>
+
+  <script>
+    (function() {
+      'use strict';
+
+      var canvas = document.getElementById('game');
+      var ctx = canvas.getContext('2d');
+      var overlayStart = document.getElementById('overlayStart');
+      var overlayEnd = document.getElementById('overlayEnd');
+      var finalScoreEl = document.getElementById('finalScore');
+
+      var W = 800;
+      var H = 400;
+      canvas.width = W;
+      canvas.height = H;
+
+      // Responsive canvas
+      function resize() {
+        var cw = Math.min(800, window.innerWidth - 32);
+        canvas.style.width = cw + 'px';
+        canvas.style.height = (cw * H / W) + 'px';
+      }
+      resize();
+      window.addEventListener('resize', resize);
+
+      // Load sprite
+      var sprite = new Image();
+      sprite.src = 'runner.png';
+
+      // Game state
+      var running = false;
+      var score = 0;
+      var coins = 0;
+      var best = parseInt(localStorage.getItem('frutexBest') || '0', 10);
+      var speed = 0;
+      var frame = 0;
+      var animId;
+
+      // 3-lane system
+      var lanes = [-120, 0, 120];
+      var laneIndex = 1;
+      var targetLane = 1;
+      var laneX = 0;
+      var leanAngle = 0;
+      var LANE_SPEED = 12;
+
+      // Player
+      var player = { x: 0, y: 0, vy: 0, w: 60, h: 80, grounded: true, jumping: false, rolling: false, rollTimer: 0 };
+      var GRAVITY = 0.85;
+      var JUMP_FORCE = -15;
+
+      // Road perspective
+      var roadSegments = [];
+      var SEG_COUNT = 50;
+      var SEG_LENGTH = 40;
+
+      // Obstacles
+      var obstacles = [];
+      var spawnDist = 0;
+
+      // Collectibles
+      var collectibles = [];
+
+      // Particles
+      var particles = [];
+
+      function initRoad() {
+        roadSegments = [];
+        for (var i = 0; i < SEG_COUNT; i++) {
+          roadSegments.push({ z: i * SEG_LENGTH });
+        }
+      }
+
+      function project(x, y, z) {
+        if (z <= 1) z = 1;
+        var scale = 300 / z;
+        return {
+          sx: W / 2 + x * scale,
+          sy: H / 2 + 80 - y * scale,
+          scale: scale
+        };
+      }
+
+      function spawnObstacle() {
+        var lane = Math.floor(Math.random() * 3);
+        var isOverhead = Math.random() < 0.35;
+        var types = isOverhead
+          ? [{ w: 60, h: 20, color: '#e85d3a', overhead: true },
+             { w: 50, h: 18, color: '#f5a623', overhead: true }]
+          : [{ w: 35, h: 50, color: '#c73e6f' },
+             { w: 40, h: 45, color: '#e8743c' },
+             { w: 30, h: 60, color: '#8b2252' }];
+        var t = types[Math.floor(Math.random() * types.length)];
+        obstacles.push({
+          lane: lane,
+          z: SEG_COUNT * SEG_LENGTH - 100,
+          w: t.w, h: t.h, color: t.color,
+          overhead: t.overhead || false,
+          hit: false
+        });
+      }
+
+      function spawnCollectible() {
+        var lane = Math.floor(Math.random() * 3);
+        collectibles.push({
+          lane: lane,
+          z: SEG_COUNT * SEG_LENGTH - 80,
+          collected: false,
+          bobPhase: Math.random() * Math.PI * 2
+        });
+      }
+
+      function spawnParticle(x, y, color) {
+        for (var i = 0; i < 6; i++) {
+          particles.push({
+            x: x + (Math.random() - 0.5) * 30,
+            y: y,
+            vx: (Math.random() - 0.5) * 6,
+            vy: -Math.random() * 8 - 3,
+            life: 15 + Math.random() * 20,
+            maxLife: 35,
+            color: color || (Math.random() < 0.5 ? '#d4a843' : '#e8c96a')
+          });
+        }
+      }
+
+      function reset() {
+        initRoad();
+        obstacles = [];
+        collectibles = [];
+        particles = [];
+        laneIndex = 1;
+        targetLane = 1;
+        laneX = 0;
+        leanAngle = 0;
+        player.y = 0;
+        player.vy = 0;
+        player.grounded = true;
+        player.jumping = false;
+        player.rolling = false;
+        player.rollTimer = 0;
+        score = 0;
+        coins = 0;
+        speed = 4;
+        spawnDist = 200;
+        frame = 0;
+      }
+
+      function jump() {
+        if (!running || player.jumping || player.rolling) return;
+        player.vy = JUMP_FORCE;
+        player.grounded = false;
+        player.jumping = true;
+        spawnParticle(W / 2 + laneX, H / 2 + 40, '#d4a843');
+      }
+
+      function roll() {
+        if (!running || player.jumping || player.rolling) return;
+        player.rolling = true;
+        player.rollTimer = 28;
+      }
+
+      function moveLane(dir) {
+        if (!running) return;
+        var next = laneIndex + dir;
+        if (next >= 0 && next <= 2) {
+          targetLane = next;
+          leanAngle = dir * 0.3;
+        }
+      }
+
+      // Input
+      document.addEventListener('keydown', function(e) {
+        if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') { e.preventDefault(); jump(); }
+        if (e.code === 'ArrowDown' || e.code === 'KeyS') { e.preventDefault(); roll(); }
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); moveLane(-1); }
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); moveLane(1); }
+      });
+      canvas.addEventListener('click', function(e) {
+        var rect = canvas.getBoundingClientRect();
+        var cy = e.clientY - rect.top;
+        var scaleY = H / rect.height;
+        cy *= scaleY;
+        if (cy > H * 0.55) roll();
+        else jump();
+      });
+      canvas.addEventListener('touchstart', function(e) {
+        e.preventDefault();
+        var x = e.touches[0].clientX;
+        var y = e.touches[0].clientY;
+        var mid = window.innerWidth / 2;
+        if (y > window.innerHeight * 0.6) roll();
+        else if (x < mid - 60) moveLane(-1);
+        else if (x > mid + 60) moveLane(1);
+        else jump();
+      });
+
+      // Swipe support
+      var touchStartX = 0, touchStartY = 0;
+      canvas.addEventListener('touchstart', function(e) {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+      }, { passive: true });
+      canvas.addEventListener('touchend', function(e) {
+        var dx = (e.changedTouches[0] ? e.changedTouches[0].clientX : touchStartX) - touchStartX;
+        var dy = (e.changedTouches[0] ? e.changedTouches[0].clientY : touchStartY) - touchStartY;
+        if (Math.abs(dx) > 40) moveLane(dx > 0 ? 1 : -1);
+      });
+
+      function update() {
+        // Lane movement
+        if (targetLane !== laneIndex) {
+          laneX += (lanes[targetLane] - laneX) * 0.18;
+          if (Math.abs(lanes[targetLane] - laneX) < 0.5) {
+            laneX = lanes[targetLane];
+            laneIndex = targetLane;
+          }
+        }
+        // Lean recovery
+        leanAngle *= 0.88;
+        if (Math.abs(leanAngle) < 0.005) leanAngle = 0;
+
+        // Roll timer
+        if (player.rolling) {
+          player.rollTimer--;
+          if (player.rollTimer <= 0) player.rolling = false;
+        }
+
+        // Player jump
+        if (!player.rolling) {
+          player.vy += GRAVITY;
+          player.y += player.vy;
+          if (player.y >= 0) {
+            player.y = 0;
+            player.vy = 0;
+            player.grounded = true;
+            player.jumping = false;
+          }
+        } else {
+          player.y = 0;
+          player.vy = 0;
+        }
+
+        // Speed
+        speed += 0.004;
+        if (speed > 14) speed = 14;
+
+        // Move road
+        for (var i = 0; i < roadSegments.length; i++) {
+          roadSegments[i].z -= speed;
+          if (roadSegments[i].z <= 0) {
+            roadSegments[i].z += SEG_COUNT * SEG_LENGTH;
+          }
+        }
+
+        // Move obstacles
+        for (var j = obstacles.length - 1; j >= 0; j--) {
+          obstacles[j].z -= speed;
+          if (obstacles[j].z < 5) {
+            obstacles.splice(j, 1);
+            score += 10;
+          }
+        }
+
+        // Move collectibles
+        for (var c = collectibles.length - 1; c >= 0; c--) {
+          collectibles[c].z -= speed;
+          if (collectibles[c].z < 5) {
+            collectibles.splice(c, 1);
+          }
+        }
+
+        // Collision
+        for (var k = obstacles.length - 1; k >= 0; k--) {
+          var o = obstacles[k];
+          if (o.z < 75 && o.z > 10 && o.lane === laneIndex && !o.hit) {
+            if (o.overhead && player.rolling) continue;
+            if (o.overhead && !player.jumping) continue;
+            if (!o.overhead && player.jumping) continue;
+            if (!o.overhead && player.rolling) {
+              // Roll under ground obstacles
+              continue;
+            }
+            endGame();
+            return;
+          }
+        }
+
+        // Collect collectibles
+        for (var cl = collectibles.length - 1; cl >= 0; cl--) {
+          var co = collectibles[cl];
+          if (co.z < 75 && co.z > 10 && co.lane === laneIndex && !co.collected) {
+            co.collected = true;
+            coins += 1;
+            score += 25;
+            spawnParticle(W / 2 + laneX, H / 2 + 20, '#e8c96a');
+            collectibles.splice(cl, 1);
+          }
+        }
+
+        // Spawn
+        spawnDist -= speed;
+        if (spawnDist <= 0) {
+          spawnObstacle();
+          spawnDist = 130 + Math.random() * 180 - speed * 2;
+          if (Math.random() < 0.5) spawnCollectible();
+        }
+
+        // Particles
+        for (var p = particles.length - 1; p >= 0; p--) {
+          var pp = particles[p];
+          pp.x += pp.vx; pp.y += pp.vy; pp.vy += 0.12; pp.life--;
+          if (pp.life <= 0) particles.splice(p, 1);
+        }
+
+        frame++;
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+
+        // Bright sky
+        var sky = ctx.createLinearGradient(0, 0, 0, H / 2 + 60);
+        sky.addColorStop(0, '#1a3a5c');
+        sky.addColorStop(0.4, '#2d6da4');
+        sky.addColorStop(0.7, '#4a90d9');
+        sky.addColorStop(1, '#7ab8f5');
+        ctx.fillStyle = sky;
+        ctx.fillRect(0, 0, W, H);
+
+        // Clouds
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        for (var cl = 0; cl < 5; cl++) {
+          var cx = ((cl * 180 + frame * 0.3) % (W + 200)) - 100;
+          var cy = 40 + cl * 35;
+          ctx.beginPath();
+          ctx.ellipse(cx, cy, 35, 14, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(cx + 25, cy - 8, 28, 12, 0, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.beginPath();
+          ctx.ellipse(cx - 20, cy - 4, 22, 10, 0, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Road segments back to front
+        for (var i = roadSegments.length - 1; i >= 0; i--) {
+          var seg = roadSegments[i];
+          var p = project(0, 0, seg.z);
+          var scale = p.scale;
+          if (scale < 0) continue;
+
+          var roadW = 210 * scale;
+          // Alternate track colors
+          var segIdx = Math.floor(seg.z / SEG_LENGTH);
+          ctx.fillStyle = (segIdx % 2 === 0) ? '#3a3a50' : '#424260';
+          ctx.fillRect(p.sx - roadW / 2, p.sy - 1, roadW, Math.max(2, scale * 6));
+
+          // Rail lines
+          ctx.strokeStyle = 'rgba(255,200,50,0.3)';
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(p.sx - roadW / 2, p.sy);
+          ctx.lineTo(p.sx - roadW / 2, p.sy);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(p.sx + roadW / 2, p.sy);
+          ctx.lineTo(p.sx + roadW / 2, p.sy);
+          ctx.stroke();
+        }
+
+        // Lane dividers on top of road
+        var nearSeg = roadSegments[roadSegments.length - 1];
+        if (nearSeg && nearSeg.z > 10) {
+          var np = project(0, 0, nearSeg.z);
+          var nw = 210 * np.scale;
+          var nln = nw / 3;
+          ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+          ctx.lineWidth = 1;
+          ctx.setLineDash([8 * np.scale, 12 * np.scale]);
+          ctx.beginPath();
+          ctx.moveTo(np.sx - nln, np.sy + 2);
+          ctx.lineTo(np.sx - nln, H);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(np.sx + nln, np.sy + 2);
+          ctx.lineTo(np.sx + nln, H);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        // Draw obstacles back to front
+        var sortedObs = obstacles.slice().sort(function(a, b) { return b.z - a.z; });
+        for (var oi = 0; oi < sortedObs.length; oi++) {
+          var ob = sortedObs[oi];
+          var op = project(lanes[ob.lane], ob.overhead ? 50 : ob.h / 2, ob.z);
+          var os = op.scale;
+          if (os < 0.5) continue;
+
+          var ow = ob.w * os * 0.6;
+          var oh = ob.h * os * 0.6;
+          var ox = op.sx - ow / 2;
+          var oy = ob.overhead ? op.sy - oh - 40 * os : op.sy - oh;
+
+          var grad = ctx.createLinearGradient(ox, oy, ox + ow, oy + oh);
+          grad.addColorStop(0, ob.color);
+          grad.addColorStop(1, 'rgba(0,0,0,0.55)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(ox, oy, ow, oh);
+          ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+          ctx.lineWidth = 1.5;
+          ctx.strokeRect(ox, oy, ow, oh);
+
+          if (ob.overhead) {
+            // Barrier poles
+            ctx.fillStyle = '#666';
+            var poleW = 3 * os;
+            ctx.fillRect(ox, oy + oh, poleW, op.sy - oy - oh);
+            ctx.fillRect(ox + ow - poleW, oy + oh, poleW, op.sy - oy - oh);
+          }
+        }
+
+        // Draw collectibles
+        for (var ci = 0; ci < collectibles.length; ci++) {
+          var c = collectibles[ci];
+          var cp = project(lanes[c.lane], 30 + Math.sin(frame * 0.08 + c.bobPhase) * 8, c.z);
+          var cs = cp.scale;
+          if (cs < 0.5) continue;
+          var cr = 10 * cs;
+          // Gold coin/bottle
+          ctx.fillStyle = '#f5c842';
+          ctx.beginPath();
+          ctx.arc(cp.sx, cp.sy - cr, cr, 0, Math.PI * 2);
+          ctx.fill();
+          ctx.fillStyle = '#e8c96a';
+          ctx.beginPath();
+          ctx.arc(cp.sx - cr * 0.2, cp.sy - cr * 1.1, cr * 0.4, 0, Math.PI * 2);
+          ctx.fill();
+          // Dollar sign
+          ctx.fillStyle = '#8b6914';
+          ctx.font = (10 * cs) + 'px Inter';
+          ctx.textAlign = 'center';
+          ctx.fillText('$', cp.sx, cp.sy - cr * 0.55);
+        }
+
+        // Particles
+        for (var pi = 0; pi < particles.length; pi++) {
+          var ppp = particles[pi];
+          ctx.fillStyle = ppp.color;
+          ctx.globalAlpha = ppp.life / ppp.maxLife;
+          ctx.beginPath();
+          ctx.arc(ppp.x, ppp.y, 3, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.globalAlpha = 1;
+
+        // Player
+        var px = W / 2 + laneX;
+        var py = H / 2 + 40 + player.y;
+        var bob = player.grounded ? Math.sin(frame * 0.12) * 2 : 0;
+
+        // Shadow
+        ctx.fillStyle = 'rgba(0,0,0,0.35)';
+        ctx.beginPath();
+        ctx.ellipse(px + player.w / 2, H / 2 + 116, player.w * 0.45, 6, 0, 0, Math.PI * 2);
+        ctx.fill();
+
+        if (sprite.complete && sprite.naturalWidth > 0) {
+          ctx.save();
+          ctx.translate(px + player.w / 2, py + bob);
+          ctx.rotate(leanAngle);
+          var scaleY = player.rolling ? 0.5 : 1.3;
+          ctx.scale(1.3, scaleY);
+          if (player.rolling) {
+            ctx.drawImage(sprite, -player.w / 2, -player.h * 0.7, player.w, player.h * 1.2);
+          } else {
+            ctx.drawImage(sprite, -player.w / 2, -player.h, player.w, player.h);
+          }
+          ctx.restore();
+        } else {
+          ctx.fillStyle = '#d4a843';
+          ctx.fillRect(px, py - player.h, player.w, player.h);
+        }
+
+        // HUD
+        ctx.fillStyle = '#fff';
+        ctx.font = '800 20px "Playfair Display", serif';
+        ctx.textAlign = 'right';
+        ctx.fillText(Math.floor(score), W - 20, 34);
+
+        // Coins
+        ctx.fillStyle = '#f5c842';
+        ctx.font = '700 14px Inter, sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('$' + coins, W - 20, 55);
+
+        ctx.fillStyle = 'rgba(255,255,255,0.35)';
+        ctx.font = '600 9px Inter, sans-serif';
+        ctx.fillText('BEST: ' + best, W - 20, 68);
+
+        // Controls
+        ctx.fillStyle = 'rgba(255,255,255,0.2)';
+        ctx.font = '9px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText('← → switch lanes   ↑ jump   ↓ roll', W / 2, H - 10);
+      }
+
+      function loop() {
+        update();
+        draw();
+        animId = requestAnimationFrame(loop);
+      }
+
+      function endGame() {
+        running = false;
+        var finalScore = Math.floor(score + coins * 25);
+        if (finalScore > best) {
+          best = finalScore;
+          localStorage.setItem('frutexBest', best);
+        }
+        finalScoreEl.textContent = finalScore + ' ($' + coins + ')';
+        overlayEnd.classList.add('show');
+      }
+
+      window.startGame = function() {
+        reset();
+        overlayStart.classList.remove('show');
+        overlayEnd.classList.remove('show');
+        running = true;
+        if (animId) cancelAnimationFrame(animId);
+        loop();
+      };
+
+      // Show start screen
+      overlayStart.classList.add('show');
+      initRoad();
+    })();
+  </script>
+</body>
+</html>

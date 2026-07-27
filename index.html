@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frutex — Refreshing the World</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #111118;
+      --bg-card: #16161f;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0b0;
+      --text-muted: #6b6b7b;
+      --gold: #d4a843;
+      --gold-light: #e8c96a;
+      --gold-dark: #b8922e;
+      --gold-glow: rgba(212, 168, 67, 0.15);
+      --accent-orange: #e8743c;
+      --accent-berry: #c73e6f;
+      --accent-mint: #3ec7a5;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --max-width: 1200px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 6rem 2rem 4rem;
+      overflow: hidden;
+      background: url('bg.png') center/cover no-repeat;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(10, 10, 15, 0.55),
+                  radial-gradient(ellipse at 50% 30%, var(--gold-glow) 0%, transparent 60%),
+                  radial-gradient(ellipse at 80% 60%, rgba(200, 60, 100, 0.06) 0%, transparent 50%),
+                  radial-gradient(ellipse at 20% 50%, rgba(60, 180, 160, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      border-radius: 100px;
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      background: rgba(212, 168, 67, 0.06);
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 0.5rem;
+    }
+    .hero h1 .golden {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+      color: var(--text-secondary);
+      font-weight: 400;
+      margin-bottom: 2.5rem;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2.2rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0a0a0f;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border-radius: 100px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .hero-cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(212, 168, 67, 0.3);
+    }
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      animation: float 2s ease-in-out infinite;
+    }
+    .scroll-indicator .arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid var(--text-muted);
+      border-bottom: 2px solid var(--text-muted);
+      transform: rotate(45deg);
+    }
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* ── Section Common ── */
+    section {
+      padding: 6rem 2rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.5px;
+    }
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin-bottom: 3rem;
+      line-height: 1.7;
+    }
+
+    /* ── About ── */
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+    .about-visual {
+      position: relative;
+    }
+    .about-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .about-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 4px;
+      height: 100%;
+      background: linear-gradient(180deg, var(--gold), var(--accent-orange));
+      border-radius: 4px 0 0 4px;
+    }
+    .about-card .icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .about-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
+    .about-card p {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      font-size: 0.95rem;
+    }
+    .about-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: var(--gold);
+      display: block;
+    }
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    /* ── Products ── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .product-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255,255,255,0.12);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .product-card.featured {
+      border-color: rgba(212, 168, 67, 0.2);
+      background: linear-gradient(180deg, rgba(212,168,67,0.08) 0%, var(--bg-card) 40%);
+    }
+    .product-card.featured:hover {
+      border-color: rgba(212, 168, 67, 0.35);
+      box-shadow: 0 20px 60px rgba(212, 168, 67, 0.1);
+    }
+    .featured-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0a0a0f;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .product-icon {
+      font-size: 4rem;
+      margin-bottom: 1.5rem;
+      display: block;
+      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+    }
+    .product-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .product-card .flavor {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+    .product-card .desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+    .product-features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+    }
+    .feature-tag {
+      font-size: 0.7rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+    .card-link {
+      display: inline-block;
+      margin-top: 1.2rem;
+      color: var(--gold-light);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: color var(--transition);
+    }
+    .card-link:hover { color: var(--gold); }
+
+    /* ── Story ── */
+    .story {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 4rem;
+      margin: 0 auto 6rem;
+      max-width: var(--max-width);
+      position: relative;
+      overflow: hidden;
+    }
+    .story::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .story-inner {
+      position: relative;
+      z-index: 1;
+    }
+    .story .section-title {
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+    }
+    .story-text {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.9;
+      max-width: 800px;
+    }
+    .story-text p + p {
+      margin-top: 1.2rem;
+    }
+
+    /* ── Values ── */
+    .values-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    .value-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius);
+      transition: border-color var(--transition);
+    }
+    .value-card:hover {
+      border-color: rgba(212, 168, 67, 0.25);
+    }
+    .value-icon {
+      font-size: 2.2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .value-card h4 {
+      font-weight: 700;
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+    .value-card p {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 4rem 2rem 2rem;
+    }
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+    }
+    .footer-brand .nav-logo {
+      display: inline-block;
+      margin-bottom: 0.8rem;
+    }
+    .footer-brand p {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+    .footer-col h4 {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 1.2rem;
+      color: var(--text-secondary);
+    }
+    .footer-col ul {
+      list-style: none;
+    }
+    .footer-col ul li {
+      margin-bottom: 0.6rem;
+    }
+    .footer-col ul li a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color var(--transition);
+    }
+    .footer-col ul li a:hover { color: var(--gold-light); }
+    .footer-bottom {
+      max-width: var(--max-width);
+      margin: 3rem auto 0;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .about { grid-template-columns: 1fr; gap: 2rem; }
+      .products-grid { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr 1fr; }
+      .story { padding: 2.5rem; }
+      section { padding: 4rem 1.5rem; }
+    }
+    @media (max-width: 600px) {
+      .values-grid { grid-template-columns: 1fr; }
+      .footer-inner { grid-template-columns: 1fr; }
+      .about-stats { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+      .about-stats .stat-number { font-size: 1.6rem; }
+      .footer-bottom { flex-direction: column; gap: 0.5rem; text-align: center; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">FRUTEX</a>
+      <ul class="nav-links">
+        <li><a href="#about">About</a></li>
+        <li><a href="#products">Products</a></li>
+        <li><a href="#story">Our Story</a></li>
+        <li><a href="#values">Values</a></li>
+        <li><a href="golden-eagle.html">Flavours</a></li>
+        <li><a href="runner-game.html">Game</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-content">
+      <div class="hero-badge">Est. 1998</div>
+      <h1>Taste the <span class="golden">Golden</span> Difference</h1>
+      <p class="hero-tagline">
+        Frutex crafts bold, refreshing beverages that fuel your ambition.
+        From our legendary Golden Eagle to our vibrant fruit blends —
+        every sip is a statement.
+      </p>
+      <a href="#products" class="hero-cta">
+        Explore Our Drinks
+        <span>&#8595;</span>
+      </a>
+    </div>
+    <div class="scroll-indicator">
+      <span>Scroll</span>
+      <div class="arrow"></div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about" class="about">
+    <div class="about-visual">
+      <div class="about-card">
+        <span class="icon">&#127865;</span>
+        <h3>Who We Are</h3>
+        <p>
+          Frutex is a premium beverage company dedicated to crafting exceptional drinks
+          that energize, refresh, and inspire. Founded with a passion for bold flavors
+          and uncompromising quality, we've grown from a small local startup into a
+          beloved brand recognized across the country.
+        </p>
+        <p style="margin-top:1rem;">
+          Our name combines "fruit" and "next" — because we're always looking ahead,
+          pushing the boundaries of what a drink can be. Every Frutex bottle is the
+          result of meticulous research, premium ingredients, and a deep love for
+          great taste.
+        </p>
+      </div>
+    </div>
+    <div class="about-text">
+      <span class="section-label">About Us</span>
+      <h2 class="section-title">Crafting Refreshment Since 1998</h2>
+      <p class="section-subtitle">
+        Over two decades of innovation, passion, and the pursuit of the perfect sip.
+        Frutex has become synonymous with quality, flavor, and the energy to seize
+        every moment.
+      </p>
+      <div class="about-stats">
+        <div class="stat">
+          <span class="stat-number">30+</span>
+          <span class="stat-label">Years of Excellence</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">40+</span>
+          <span class="stat-label">Countries</span>
+        </div>
+        <div class="stat">
+          <span class="stat-number">500M+</span>
+          <span class="stat-label">Bottles Sold</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section id="products">
+    <span class="section-label">Our Products</span>
+    <h2 class="section-title">Drinks That Define Us</h2>
+    <p class="section-subtitle">
+      Four iconic beverages, each crafted with care and bursting with character.
+      Discover your favorite — or try them all.
+    </p>
+    <div class="products-grid">
+
+      <!-- Golden Eagle — Featured -->
+      <div class="product-card featured">
+        <span class="featured-badge">&#9733; Flagship</span>
+        <span class="product-icon">&#129413;</span>
+        <h3>Golden Eagle</h3>
+        <p class="flavor">Citrus &#8226; Honey &#8226; Energy</p>
+        <p class="desc">
+          Our crown jewel. Golden Eagle delivers a soaring rush of crisp citrus
+          blended with a touch of wild honey and a proprietary energy complex.
+          It's the drink that built our reputation — bold, balanced, and utterly
+          unforgettable.
+        </p>
+        <div class="product-features">
+          <span class="feature-tag">Best Seller</span>
+          <span class="feature-tag">Natural Caffeine</span>
+          <span class="feature-tag">Vitamin B12</span>
+          <span class="feature-tag">Zero Sugar Option</span>
+        </div>
+        <a href="golden-eagle.html" class="card-link">Explore Flavours &#8594;</a>
+      </div>
+
+      <!-- Frutti -->
+      <div class="product-card">
+        <span class="product-icon">&#127827;</span>
+        <h3>Frutti</h3>
+        <p class="flavor">Tropical Fruits &#8226; Berry &#8226; Refresh</p>
+        <p class="desc">
+          Bursting with the taste of sun-ripened strawberries, mango, and a
+          medley of tropical fruits. Frutti is pure joy in a bottle — light,
+          vibrant, and perfect for any time of day. No artificial colors, just
+          real fruit essence.
+        </p>
+        <div class="product-features">
+          <span class="feature-tag">Real Fruit Juice</span>
+          <span class="feature-tag">No Artificial Colors</span>
+          <span class="feature-tag">Vitamin C Rich</span>
+        </div>
+      </div>
+
+      <!-- Relax -->
+      <div class="product-card">
+        <span class="product-icon">&#127793;</span>
+        <h3>Relax</h3>
+        <p class="flavor">Herbal &#8226; Chamomile &#8226; Calm</p>
+        <p class="desc">
+          Unwind with Relax, our soothing herbal infusion crafted for moments
+          of calm. A delicate blend of chamomile, lavender, and a hint of pear
+          creates a mellow, restorative experience. The perfect way to end
+          your day.
+        </p>
+        <div class="product-features">
+          <span class="feature-tag">Caffeine Free</span>
+          <span class="feature-tag">Herbal Infusion</span>
+          <span class="feature-tag">Low Calorie</span>
+        </div>
+      </div>
+
+      <!-- Natural -->
+      <div class="product-card">
+        <span class="product-icon">&#127807;</span>
+        <h3>Natural</h3>
+        <p class="flavor">Spring Water &#8226; Minerals &#8226; Pure</p>
+        <p class="desc">
+          Pure and crisp, Natural is sourced from pristine mountain springs
+          and enhanced with essential minerals. No sweeteners, no additives —
+          just clean, refreshing hydration in its most authentic form.
+        </p>
+        <div class="product-features">
+          <span class="feature-tag">Natural Spring Water</span>
+          <span class="feature-tag">Essential Minerals</span>
+          <span class="feature-tag">Zero Calories</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Our Story -->
+  <div id="story" class="story">
+    <div class="story-inner">
+      <span class="section-label">Our Story</span>
+      <h2 class="section-title">From Garage to Global</h2>
+      <div class="story-text">
+        <p>
+          Frutex began in a small garage in 1998, when two university friends —
+          a food scientist and a marketing graduate — decided the world deserved
+          better drinks. Armed with little more than a blender, a notebook full of
+          recipes, and an unshakable belief in their vision, they spent nights
+          perfecting what would become their first hit: <strong>Golden Eagle</strong>.
+        </p>
+        <p>
+          The name Frutex was chosen carefully. A fusion of "fruit" and "next,"
+          it embodied their mission: to take natural flavors and push them into
+          the future. Golden Eagle launched at a single farmers' market stall.
+          Within six months, word of mouth had turned it into a local phenomenon.
+          Within two years, it was on shelves across the country.
+        </p>
+        <p>
+          Today, Frutex operates in over 40 countries, employs more than 3,000
+          people, and continues to innovate. Frutti brought tropical joy to
+          millions. Relax redefined what a calming drink could be. But Golden Eagle
+          remains our heart and soul — the one that started it all, and still the
+          one our fans reach for when they need to soar.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Values -->
+  <section id="values">
+    <span class="section-label">What We Stand For</span>
+    <h2 class="section-title">Our Values</h2>
+    <p class="section-subtitle">
+      Every bottle of Frutex reflects the principles that guide everything we do —
+      from sourcing ingredients to supporting our communities.
+    </p>
+    <div class="values-grid">
+      <div class="value-card">
+        <span class="value-icon">&#127793;</span>
+        <h4>Sustainability</h4>
+        <p>100% recyclable packaging and responsibly sourced ingredients. We're committed to a greener planet.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">&#11088;</span>
+        <h4>Quality First</h4>
+        <p>We never compromise. Every ingredient is tested, every batch is tasted, and only the best makes the cut.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">&#128161;</span>
+        <h4>Innovation</h4>
+        <p>From our energy complex to our cold-press extraction, we're always pushing the boundaries of beverage science.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">&#129309;</span>
+        <h4>Community</h4>
+        <p>We give back 2% of profits to local initiatives and partner with farmers to build sustainable supply chains.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="nav-logo">FRUTEX</span>
+        <p>
+          Crafting bold, refreshing beverages since 1998. From our legendary
+          Golden Eagle to our vibrant fruit blends — every sip is a statement.
+        </p>
+      </div>
+      <div class="footer-col">
+        <h4>Products</h4>
+        <ul>
+          <li><a href="#">Golden Eagle</a></li>
+          <li><a href="#">Frutti</a></li>
+          <li><a href="#">Relax</a></li>
+          <li><a href="#">Natural</a></li>
+          <li><a href="#">Limited Editions</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Press</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a href="#">FAQ</a></li>
+          <li><a href="#">Shipping</a></li>
+          <li><a href="#">Returns</a></li>
+          <li><a href="#">Privacy Policy</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Frutex Beverages. All rights reserved.</span>
+      <span>Made with passion &#8226; Served with pride</span>
+    </div>
+  </footer>
+
+</body>
+</html>

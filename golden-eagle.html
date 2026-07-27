@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Golden Eagle Flavours — Frutex</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #0a0a0f;
+      --bg-secondary: #111118;
+      --bg-card: #16161f;
+      --text-primary: #f0f0f0;
+      --text-secondary: #a0a0b0;
+      --text-muted: #6b6b7b;
+      --gold: #d4a843;
+      --gold-light: #e8c96a;
+      --gold-dark: #b8922e;
+      --gold-glow: rgba(212, 168, 67, 0.15);
+      --radius: 12px;
+      --radius-lg: 20px;
+      --max-width: 1200px;
+      --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .nav-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+    .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 1px;
+      text-decoration: none;
+    }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    .nav-links a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color var(--transition);
+      letter-spacing: 0.3px;
+    }
+    .nav-links a:hover { color: var(--gold-light); }
+
+    /* ── Page Hero ── */
+    .page-hero {
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      padding: 8rem 2rem 4rem;
+      overflow: hidden;
+      background: linear-gradient(180deg, rgba(212,168,67,0.1) 0%, transparent 50%),
+                  radial-gradient(ellipse at 50% 40%, var(--gold-glow) 0%, transparent 60%);
+    }
+    .page-hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 30% 60%, rgba(200,120,40,0.05) 0%, transparent 50%),
+                  radial-gradient(ellipse at 70% 40%, rgba(212,168,67,0.04) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 0.4rem 1.2rem;
+      border: 1px solid rgba(212, 168, 67, 0.3);
+      border-radius: 100px;
+      color: var(--gold-light);
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      background: rgba(212, 168, 67, 0.06);
+    }
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 1rem;
+    }
+    .page-hero h1 .golden {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--gold-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.1rem;
+      max-width: 550px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* ── Back Link ── */
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 500;
+      padding: 1.5rem 2rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+      transition: color var(--transition);
+    }
+    .back-link:hover { color: var(--gold-light); }
+
+    /* ── Section Common ── */
+    section {
+      padding: 5rem 2rem;
+      max-width: var(--max-width);
+      margin: 0 auto;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      letter-spacing: -0.5px;
+    }
+    .section-subtitle {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin-bottom: 3rem;
+      line-height: 1.7;
+    }
+
+    /* ── Flavours Grid ── */
+    .flavours-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .flavour-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    .flavour-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(212, 168, 67, 0.2);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .flavour-card.classic {
+      border-color: rgba(212, 168, 67, 0.25);
+      background: linear-gradient(180deg, rgba(212,168,67,0.1) 0%, var(--bg-card) 40%);
+    }
+    .classic-badge {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0a0a0f;
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .flavour-img {
+      width: 100%;
+      height: 180px;
+      border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .flavour-img.classic-img { background-image: url('classic.png'); }
+    .flavour-img.red-img { background-image: url('red-edition.png'); }
+    .flavour-img.zero-img { background-image: url('zero-sugar.png'); }
+    .flavour-img.tropical-img { background-image: url('tropical-edition.png'); }
+    .flavour-img.blue-img { background-image: url('arctic-blue.png'); }
+    .flavour-img.coffee-img { background-image: url('coffee-edition.png'); }
+    .flavour-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      margin-bottom: 0.3rem;
+    }
+    .flavour-card .profile {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.5px;
+    }
+    .flavour-card .desc {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+    .flavour-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      margin-top: 1.2rem;
+    }
+    .highlight-tag {
+      font-size: 0.68rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 100px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── Comparison Table ── */
+    .comparison {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 3rem;
+      margin: 0 auto 5rem;
+      max-width: var(--max-width);
+      overflow-x: auto;
+    }
+    .comparison table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .comparison th {
+      text-align: left;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      padding: 0.8rem 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .comparison td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .comparison td:first-child {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    .comparison tr:last-child td { border-bottom: none; }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      padding: 4rem 2rem 6rem;
+    }
+    .cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.9rem 2.2rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #0a0a0f;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      border-radius: 100px;
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(212, 168, 67, 0.3);
+    }
+
+    /* ── Footer ── */
+    footer {
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 2rem;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 900px) {
+      .flavours-grid { grid-template-columns: 1fr; }
+      .comparison { padding: 1.5rem; }
+      section { padding: 3rem 1.5rem; }
+    }
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-inner">
+      <a href="index.html" class="nav-logo">FRUTEX</a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#products">Products</a></li>
+        <li><a href="golden-eagle.html" class="active">Flavours</a></li>
+        <li><a href="runner-game.html">Game</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <section class="page-hero">
+    <div class="hero-content">
+      <div class="hero-badge">Flagship Range</div>
+      <h1><span class="golden">Golden Eagle</span> Flavours</h1>
+      <p class="hero-subtitle">
+        Six bold expressions of our iconic energy drink. From the original
+        that started it all to daring new blends — there's a Golden Eagle
+        for every moment.
+      </p>
+    </div>
+  </section>
+
+  <!-- Back link -->
+  <a href="index.html" class="back-link">&#8592; Back to Frutex</a>
+
+  <!-- Flavours -->
+  <section id="flavours">
+    <span class="section-label">The Collection</span>
+    <h2 class="section-title">Choose Your Flight</h2>
+    <p class="section-subtitle">
+      Each Golden Eagle variant is crafted with the same premium energy complex,
+      then infused with distinct natural flavours for a unique experience.
+    </p>
+
+    <div class="flavours-grid">
+
+      <!-- Classic -->
+      <div class="flavour-card classic">
+        <span class="classic-badge">&#9733; Original</span>
+        <div class="flavour-img classic-img"></div>
+        <h3>Classic</h3>
+        <p class="profile">Citrus &#8226; Honey &#8226; Bold</p>
+        <p class="desc">
+          The one that built our name. A soaring blend of sun-ripened citrus
+          with a whisper of wild honey. Crisp, balanced, and unmistakably
+          Golden Eagle.
+        </p>
+        <div class="flavour-highlights">
+          <span class="highlight-tag">Original Recipe</span>
+          <span class="highlight-tag">Full Energy</span>
+          <span class="highlight-tag">160mg Caffeine</span>
+        </div>
+      </div>
+
+      <!-- Red Edition -->
+      <div class="flavour-card">
+        <div class="flavour-img red-img"></div>
+        <h3>Red Edition</h3>
+        <p class="profile">Cherry &#8226; Pomegranate &#8226; Bold</p>
+        <p class="desc">
+          A fierce and fearless blend. Tart cherry meets deep pomegranate
+          in a striking red fusion that delivers a powerful energy kick
+          with a smooth, fruity finish. Stand out from the crowd.
+        </p>
+        <div class="flavour-highlights">
+          <span class="highlight-tag">Cherry & Pomegranate</span>
+          <span class="highlight-tag">Antioxidants</span>
+          <span class="highlight-tag">150mg Caffeine</span>
+        </div>
+      </div>
+
+      <!-- Zero Sugar Edition -->
+      <div class="flavour-card">
+        <div class="flavour-img zero-img"></div>
+        <h3>Zero Sugar Edition</h3>
+        <p class="profile">Crisp &#8226; Light &#8226; Guilt-Free</p>
+        <p class="desc">
+          All the soaring energy of the Classic — now with zero sugar.
+          Sweetened naturally with stevia and erythritol for a clean,
+          refreshing taste that won't weigh you down.
+        </p>
+        <div class="flavour-highlights">
+          <span class="highlight-tag">Zero Sugar Edition</span>
+          <span class="highlight-tag">Stevia Sweetened</span>
+          <span class="highlight-tag">5 Calories</span>
+        </div>
+      </div>
+
+      <!-- Tropical Edition -->
+      <div class="flavour-card">
+        <div class="flavour-img tropical-img"></div>
+        <h3>Tropical Edition</h3>
+        <p class="profile">Mango &#8226; Pineapple &#8226; Passionfruit</p>
+        <p class="desc">
+          A sun-drenched escape in every sip. Ripe mango, tangy pineapple,
+          and passionfruit collide with our energy complex for a vibrant,
+          island-inspired rush.
+        </p>
+        <div class="flavour-highlights">
+          <span class="highlight-tag">Real Fruit Juice</span>
+          <span class="highlight-tag">Vitamin C</span>
+          <span class="highlight-tag">Summer Edition</span>
+        </div>
+      </div>
+
+      <!-- Zero Caffeine Edition -->
+      <div class="flavour-card">
+        <div class="flavour-img blue-img"></div>
+        <h3>Zero Caffeine Edition</h3>
+        <p class="profile">Blue Raspberry &#8226; Cool Mint &#8226; Caffeine-Free</p>
+        <p class="desc">
+          All the bold taste, none of the buzz. An icy blast of blue
+          raspberry with a whisper of cool mint — the full Golden Eagle
+          flavour experience with absolutely zero caffeine.
+        </p>
+        <div class="flavour-highlights">
+          <span class="highlight-tag">Blue Raspberry</span>
+          <span class="highlight-tag">Cool Mint Finish</span>
+          <span class="highlight-tag">Zero Caffeine Edition</span>
+        </div>
+      </div>
+
+      <!-- Coffee Edition -->
+      <div class="flavour-card">
+        <div class="flavour-img coffee-img"></div>
+        <h3>Coffee Edition</h3>
+        <p class="profile">Cold Brew &#8226; Vanilla &#8226; Smooth</p>
+        <p class="desc">
+          The perfect fusion of our energy complex and rich cold-brew coffee.
+          A velvety blend with hints of vanilla and caramel — for those who
+          want their wings with a caffeine double-shot.
+        </p>
+        <div class="flavour-highlights">
+          <span class="highlight-tag">Cold Brew Coffee</span>
+          <span class="highlight-tag">Vanilla Notes</span>
+          <span class="highlight-tag">200mg Caffeine</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Comparison Table -->
+  <div class="comparison">
+    <span class="section-label">At a Glance</span>
+    <h2 class="section-title" style="font-size:clamp(1.6rem,4vw,2.2rem);">Flavour Comparison</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Flavour</th>
+          <th>Profile</th>
+          <th>Caffeine</th>
+          <th>Calories</th>
+          <th>Best For</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Classic</td>
+          <td>Citrus & Honey</td>
+          <td>160mg</td>
+          <td>110</td>
+          <td>Everyday energy</td>
+        </tr>
+        <tr>
+          <td>Red Edition</td>
+          <td>Cherry & Pomegranate</td>
+          <td>150mg</td>
+          <td>120</td>
+          <td>Bold energy</td>
+        </tr>
+        <tr>
+          <td>Zero Sugar Edition</td>
+          <td>Crisp & Light</td>
+          <td>160mg</td>
+          <td>5</td>
+          <td>Guilt-free boost</td>
+        </tr>
+        <tr>
+          <td>Tropical Edition</td>
+          <td>Mango & Pineapple</td>
+          <td>140mg</td>
+          <td>120</td>
+          <td>Summer refreshment</td>
+        </tr>
+        <tr>
+          <td>Zero Caffeine Edition</td>
+          <td>Blue Raspberry & Mint</td>
+          <td>0mg</td>
+          <td>110</td>
+          <td>Caffeine-free boost</td>
+        </tr>
+        <tr>
+          <td>Coffee Edition</td>
+          <td>Cold Brew & Vanilla</td>
+          <td>200mg</td>
+          <td>130</td>
+          <td>Maximum boost</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <a href="index.html#products" class="cta-btn">
+      View All Frutex Products
+      <span>&#8594;</span>
+    </a>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    &copy; 2026 Frutex Beverages. All rights reserved. &#8226; Crafted with passion.
+  </footer>
+
+</body>
+</html>
