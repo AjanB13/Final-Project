@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Golden Eagle Parkour — Frutex</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Playfair+Display:wght@800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0a0a0f;--g:#d4a843;--gl:#e8c96a;--gd:#b8922e}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Inter,system-ui;background:var(--bg);color:#f0f0f0;min-height:100vh;display:flex;flex-direction:column}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(10,10,15,.85);backdrop-filter:blur(20px);border-bottom:1px solid rgba(255,255,255,.06)}
+    .ni{max-width:1200px;margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+    .nl{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--g);letter-spacing:1px;text-decoration:none}
+    .nv{display:flex;gap:2rem;list-style:none}
+    .nv a{color:#a0a0b0;text-decoration:none;font-size:.9rem;font-weight:500;transition:color .3s}
+    .nv a:hover,.nv a.active{color:var(--gl)}.nv a.active{border-bottom:2px solid var(--g);padding-bottom:2px}
+    .wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 1rem 1rem}
+    .hdr{text-align:center;margin-bottom:.5rem}
+    .hdr h1{font-family:'Playfair Display',serif;font-size:clamp(1.4rem,4vw,1.8rem);background:linear-gradient(135deg,var(--gl),var(--g),var(--gd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .hdr p{color:#a0a0b0;font-size:.75rem}
+    .gc{position:relative;background:#0d0d18;border:1px solid rgba(212,168,67,.2);border-radius:16px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+    canvas{display:block}
+    .ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(10,10,20,.8);pointer-events:none;opacity:0;transition:opacity .4s}
+    .ov.show{opacity:1;pointer-events:all}
+    .ov h2{font-family:'Playfair Display',serif;font-size:1.6rem;background:linear-gradient(135deg,var(--gl),var(--g));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:.2rem}
+    .ov .sub{font-size:.8rem;color:#a0a0b0;margin-bottom:.7rem}
+    .ov .tips{font-size:.63rem;color:#a0a0b0;margin-bottom:1rem;line-height:2;text-align:center}
+    .btn{padding:.6rem 1.6rem;background:linear-gradient(135deg,var(--g),var(--gd));color:#0a0a0f;font-weight:700;font-size:.9rem;border:none;border-radius:100px;cursor:pointer;transition:transform .3s,box-shadow .3s}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(212,168,67,.3)}
+    footer{text-align:center;padding:1rem;color:#555;font-size:.58rem}
+    @media(max-width:600px){.nv{display:none}}
+  </style>
+</head>
+<body>
+
+<nav><div class="ni">
+  <a href="index.html" class="nl">FRUTEX</a>
+  <ul class="nv">
+    <li><a href="index.html">Home</a></li><li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#products">Products</a></li><li><a href="golden-eagle.html">Flavours</a></li>
+    <li><a href="rush.html" class="active">Game</a></li>
+  </ul>
+</div></nav>
+
+<div class="wrap">
+  <div class="hdr"><h1>Golden Eagle Parkour</h1><p>Jump across rooftops and collect Golden Eagle cans!</p></div>
+  <div class="gc" style="width:100%;max-width:960px">
+    <canvas id="g"></canvas>
+    <div class="ov show" id="os">
+      <h2>Golden Eagle Parkour</h2>
+      <div class="tips">
+        <strong>SPACE</strong> Jump &bull; <strong>SPACE x2</strong> Double Jump<br>
+        Jump across rooftops and collect <strong>Golden Eagle</strong> cans!
+      </div>
+      <button class="btn" onclick="start()">Start Running</button>
+    </div>
+    <div class="ov" id="oe">
+      <h2>Game Over</h2>
+      <p class="sub">Score: <span id="fs">0</span> &nbsp; Cans: <span id="fc">0</span></p>
+      <button class="btn" onclick="start()">Run Again</button>
+    </div>
+  </div>
+  <p style="font-size:.58rem;color:#555;margin-top:.4rem">Auto-run &bull; SPACE jump &bull; SPACE x2 = double jump &bull; click to play</p>
+</div>
+<footer>&copy; 2026 Frutex &bull; Golden Eagle Parkour</footer>
+
+<script>
+(function(){
+'use strict';
+var c=document.getElementById('g'),ctx=c.getContext('2d'),W=960,H=600;
+c.width=W;c.height=H;
+function rz(){var cw=Math.min(960,innerWidth-32);c.style.width=cw+'px';c.style.height=(cw*H/W)+'px'}
+rz();window.addEventListener('resize',rz);
+
+var sprite=new Image();sprite.src='runner.png';
+var bgImg=new Image();bgImg.src='game-bg.png';
+var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
+
+var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
+var speed=5,frame=0,animId,camX=0;
+
+var G=0.6,JUMP=-11.5;
+var player={x:150,y:0,w:45,h:65,vy:0,jumps:0,maxJ:2,sliding:false,slideT:0,onGround:false};
+var GROUND=H-40;
+
+// Platforms (rooftops)
+var plats=[{x:0,y:GROUND,w:350,h:20}];
+var nextX=280;
+
+// Collectibles
+var cans2=[];
+
+function spawnPlat(x){
+  var gap=60+Math.random()*80;
+  var w=80+Math.random()*120;
+  var h=Math.random()<.3?GROUND-60-Math.random()*70:GROUND; // some raised
+  plats.push({x:x+gap,y:h,w:w,h:20});
+  if(Math.random()<.55) cans2.push({x:x+gap+w*.2+Math.random()*w*.5,y:h-45-Math.random()*25,b:Math.random()*Math.PI*2});
+  nextX=x+gap+w;
+}
+
+function reset(){
+  plats=[{x:0,y:GROUND,w:350,h:20}];cans2=[];nextX=280;
+  for(var i=0;i<8;i++)spawnPlat(nextX);
+  player.x=150;player.y=GROUND-player.h;player.vy=0;player.jumps=0;player.sliding=false;player.slideT=0;player.onGround=true;
+  score=0;cans=0;speed=4;frame=0;camX=0;
+}
+reset();
+
+function jump_(){
+  if(!running||player.sliding)return;
+  if(player.jumps<player.maxJ){
+    player.vy=JUMP+player.jumps*2;player.onGround=false;player.jumps++;
+  }
+}
+function slide_(){
+  if(!running||player.sliding||player.jumps>0)return;
+  player.sliding=true;player.slideT=22;
+}
+
+document.addEventListener('keydown',function(e){
+  if(e.code==='Space'||e.code==='ArrowUp'||e.code==='KeyW'){
+    e.preventDefault();
+    if(!running&&(oe.classList.contains('show')||os.classList.contains('show'))){start();return}
+    jump_();
+  }
+  if(e.code==='ArrowDown'||e.code==='KeyS'){e.preventDefault();slide_()}
+});
+c.addEventListener('click',function(e){var r=c.getBoundingClientRect(),cy=(e.clientY-r.top)/r.height*H;cy>H*.6?slide_():jump_()});
+var tsX=0,tsY=0;
+c.addEventListener('touchstart',function(e){tsX=e.touches[0].clientX;tsY=e.touches[0].clientY},{passive:true});
+c.addEventListener('touchend',function(e){var dy=(e.changedTouches[0]?e.changedTouches[0].clientY:tsY)-tsY;dy<-20?jump_():slide_()});
+
+function update(){
+  player.vy+=G;player.y+=player.vy;
+  if(player.sliding){player.slideT--;if(player.slideT<=0)player.sliding=false}
+
+  // Platform collision
+  var ph=player.sliding?player.h*.4:player.h;
+  var py2=player.y+ph;
+  player.onGround=false;
+  for(var i=0;i<plats.length;i++){
+    var p=plats[i];
+    if(player.x+player.w>p.x&&player.x<p.x+p.w&&py2>=p.y-5&&py2<=p.y+15&&player.vy>=0){
+      player.y=p.y-ph;player.vy=0;player.jumps=0;player.sliding=false;player.onGround=true;break;
+    }
+  }
+
+  // Auto-run
+  player.x+=speed;
+  camX+=(player.x-150-camX)*.12;
+
+  // Score
+  score=Math.max(score,Math.floor(player.x/24));
+  speed=4+Math.floor(player.x/700)*.4;if(speed>10)speed=10;
+
+  // Spawn
+  while(nextX<player.x+900)spawnPlat(nextX);
+  for(var i=plats.length-1;i>=0;i--){if(plats[i].x+plats[i].w<player.x-500)plats.splice(i,1)}
+  for(var i=cans2.length-1;i>=0;i--){if(cans2[i].x<player.x-400)cans2.splice(i,1)}
+
+  // Collect cans
+  for(var i=cans2.length-1;i>=0;i--){
+    var cn=cans2[i];
+    if(player.x+player.w>cn.x-8&&player.x<cn.x+20&&player.y+player.h>cn.y-8&&player.y<cn.y+28){
+      cans++;score+=30;cans2.splice(i,1);
+    }
+  }
+
+  // Fall death
+  if(player.y>GROUND+120){endGame();return}
+  frame++;
+}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  // Background image with parallax
+  if(bgImg.complete&&bgImg.naturalWidth>0){
+    var bgW=bgImg.naturalWidth,bgH=bgImg.naturalHeight;
+    var scale=Math.max(W/bgW,GROUND/bgH);
+    var sw=W/scale,sh=GROUND/scale;
+    var sx=(camX*.15)%(bgW-sw);
+    ctx.drawImage(bgImg,sx,0,sw,sh,0,0,W,GROUND);
+    ctx.fillStyle='rgba(0,0,0,0.25)';ctx.fillRect(0,0,W,GROUND);
+  }else{
+    var sky=ctx.createLinearGradient(0,0,0,GROUND);
+    sky.addColorStop(0,'#0d1b3e');sky.addColorStop(.6,'#1a2d52');sky.addColorStop(1,'#2a3d60');
+    ctx.fillStyle=sky;ctx.fillRect(0,0,W,GROUND);
+  }
+
+  // Platforms
+  for(var i=0;i<plats.length;i++){
+    var p=plats[i],px=p.x-camX;if(px+p.w<-40||px>W+40)continue;
+    var g2=ctx.createLinearGradient(px,p.y,px,p.y+p.h);
+    g2.addColorStop(0,'#5a4a30');g2.addColorStop(1,'#2a1a10');
+    ctx.fillStyle=g2;ctx.fillRect(px,p.y,p.w,p.h);
+    ctx.strokeStyle='rgba(255,255,255,.1)';ctx.lineWidth=1;ctx.strokeRect(px,p.y,p.w,p.h);
+    ctx.strokeStyle='rgba(212,168,67,.25)';ctx.beginPath();ctx.moveTo(px,p.y);ctx.lineTo(px+p.w,p.y);ctx.stroke();
+    // Brick lines
+    ctx.strokeStyle='rgba(255,255,255,.04)';
+    for(var bx2=0;bx2<p.w;bx2+=25){ctx.beginPath();ctx.moveTo(px+bx2,p.y);ctx.lineTo(px+bx2,p.y+p.h);ctx.stroke()}
+    ctx.beginPath();ctx.moveTo(px,p.y+p.h/2);ctx.lineTo(px+p.w,p.y+p.h/2);ctx.stroke();
+  }
+
+  // Cans
+  for(var i=0;i<cans2.length;i++){
+    var cn=cans2[i],cx=cn.x-camX,cy=cn.y+Math.sin(frame*.08+cn.b)*3;
+    if(cx<-10||cx>W+10)continue;
+    var cg3=ctx.createLinearGradient(cx,cy-14,cx+12,cy+4);
+    cg3.addColorStop(0,'#f5d442');cg3.addColorStop(.5,'#d4a843');cg3.addColorStop(1,'#b8922e');
+    ctx.fillStyle=cg3;ctx.fillRect(cx,cy-14,12,18);
+    ctx.strokeStyle='#8b6914';ctx.lineWidth=.7;ctx.strokeRect(cx,cy-14,12,18);
+    ctx.fillStyle='#8b6914';ctx.fillRect(cx,cy-14,12,2.5);ctx.fillRect(cx,cy+1,12,2.5);
+    ctx.fillStyle='rgba(232,201,106,.1)';ctx.beginPath();ctx.arc(cx+6,cy-5,11,0,Math.PI*2);ctx.fill();
+  }
+
+  // Player
+  var px=player.x-camX,py=player.y;
+  // Shadow
+  var shY=GROUND;
+  for(var i=0;i<plats.length;i++){var pp=plats[i];if(player.x+player.w>pp.x&&player.x<pp.x+pp.w){shY=pp.y;break}}
+  ctx.fillStyle='rgba(0,0,0,.25)';ctx.beginPath();ctx.ellipse(px+player.w/2,shY+3,player.w*.3,3.5,0,0,Math.PI*2);ctx.fill();
+
+  if(sprite.complete&&sprite.naturalWidth>0){
+    ctx.save();ctx.translate(px+player.w/2,py+player.h/2+(player.onGround?Math.sin(frame*.15)*1.5:0));
+    ctx.scale(-1,player.sliding?.4:1);
+    ctx.drawImage(sprite,-player.w/2,-player.h/2,player.w,player.h);
+    ctx.restore();
+  }else{
+    ctx.fillStyle='#d4a843';ctx.fillRect(px,py,player.w,player.sliding?player.h*.4:player.h);
+  }
+
+  // Double jump text
+  if(player.jumps===1&&player.vy<0){
+    ctx.fillStyle='rgba(232,201,106,.8)';ctx.font='700 10px Inter';ctx.textAlign='center';
+    ctx.fillText('DOUBLE JUMP!',px+player.w/2,py-15);
+  }
+
+  // HUD
+  ctx.fillStyle='#fff';ctx.font='800 20px "Playfair Display",serif';ctx.textAlign='right';
+  ctx.fillText(score,W-14,26);
+  ctx.fillStyle='#f5c842';ctx.font='700 11px Inter';ctx.textAlign='right';
+  ctx.fillText(cans+' cans',W-14,42);
+  ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='600 8px Inter';
+  ctx.fillText('BEST '+best,W-14,54);
+
+  ctx.fillStyle='rgba(255,255,255,.1)';ctx.font='8px Inter';ctx.textAlign='center';
+  ctx.fillText('SPACE jump(x2)  Auto-run',W/2,H-6);
+}
+
+function loop(){update();draw();animId=requestAnimationFrame(loop)}
+
+function endGame(){
+  running=false;
+  var fs=score+cans*10;
+  if(fs>best){best=fs;localStorage.setItem('parkBest',best)}
+  fsEl.textContent=fs;fcEl.textContent=cans;
+  oe.classList.add('show');
+}
+
+window.start=function(){
+  reset();os.classList.remove('show');oe.classList.remove('show');
+  running=true;if(animId)cancelAnimationFrame(animId);loop();
+};
+})();
+</script>
+</body>
+</html>

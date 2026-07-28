@@ -7,23 +7,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #111118;
-      --bg-card: #16161f;
-      --text-primary: #f0f0f0;
-      --text-secondary: #a0a0b0;
-      --text-muted: #6b6b7b;
-      --gold: #d4a843;
-      --gold-light: #e8c96a;
-      --gold-dark: #b8922e;
-      --gold-glow: rgba(212, 168, 67, 0.15);
+      --bg-primary: #f7f5f0;
+      --bg-secondary: #eeebe4;
+      --bg-card: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #5a5a5a;
+      --text-muted: #8a8a8a;
+      --gold: #c8963e;
+      --gold-light: #d4a843;
+      --gold-dark: #a07828;
+      --gold-glow: rgba(200, 150, 62, 0.12);
       --accent-orange: #e8743c;
       --accent-berry: #c73e6f;
-      --accent-mint: #3ec7a5;
+      --accent-mint: #4a9e8a;
       --radius: 12px;
       --radius-lg: 20px;
       --max-width: 1200px;
       --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --shadow-sm: 0 2px 8px rgba(0,0,0,0.04);
+      --shadow-md: 0 8px 30px rgba(0,0,0,0.06);
+      --shadow-lg: 0 16px 48px rgba(0,0,0,0.08);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -43,10 +46,10 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(10, 10, 15, 0.85);
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
     .nav-inner {
       max-width: var(--max-width);
@@ -77,8 +80,17 @@
       font-weight: 500;
       transition: color var(--transition);
       letter-spacing: 0.3px;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 100%;
+      height: 2px; background: var(--gold);
+      transition: right var(--transition);
     }
     .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { right: 0; }
 
     /* ── Hero ── */
     .hero {
@@ -91,16 +103,6 @@
       padding: 6rem 2rem 4rem;
       overflow: hidden;
       background: url('bg.png') center/cover no-repeat;
-    }
-    .hero::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: rgba(10, 10, 15, 0.55),
-                  radial-gradient(ellipse at 50% 30%, var(--gold-glow) 0%, transparent 60%),
-                  radial-gradient(ellipse at 80% 60%, rgba(200, 60, 100, 0.06) 0%, transparent 50%),
-                  radial-gradient(ellipse at 20% 50%, rgba(60, 180, 160, 0.05) 0%, transparent 50%);
-      pointer-events: none;
     }
     .hero-content {
       position: relative;
@@ -156,10 +158,16 @@
       border-radius: 100px;
       transition: transform var(--transition), box-shadow var(--transition);
       letter-spacing: 0.3px;
+      animation: ctaPulse 2.5s ease-in-out infinite;
+    }
+    @keyframes ctaPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(212,168,67,0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(212,168,67,0); }
     }
     .hero-cta:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 32px rgba(212, 168, 67, 0.3);
+      box-shadow: 0 8px 32px rgba(212, 168, 67, 0.4);
+      animation: none;
     }
     .scroll-indicator {
       position: absolute;
@@ -191,8 +199,11 @@
     /* ── Section Common ── */
     section {
       padding: 6rem 2rem;
-      max-width: var(--max-width);
-      margin: 0 auto;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
     }
     .section-label {
       display: inline-block;
@@ -231,7 +242,8 @@
     }
     .about-card {
       background: var(--bg-card);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-sm);
       border-radius: var(--radius-lg);
       padding: 2.5rem;
       position: relative;
@@ -291,8 +303,9 @@
     }
     .product-card {
       background: var(--bg-card);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,0,0,0.06);
       border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
       padding: 2.5rem 2rem;
       text-align: center;
       transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
@@ -300,17 +313,21 @@
       overflow: hidden;
     }
     .product-card:hover {
-      transform: translateY(-6px);
-      border-color: rgba(255,255,255,0.12);
-      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+      transform: translateY(-8px);
+      border-color: rgba(200,150,62,0.25);
+      box-shadow: var(--shadow-lg);
+    }
+    .product-card:hover .product-icon {
+      transform: scale(1.15);
+      filter: drop-shadow(0 8px 20px rgba(0,0,0,0.12));
     }
     .product-card.featured {
-      border-color: rgba(212, 168, 67, 0.2);
-      background: linear-gradient(180deg, rgba(212,168,67,0.08) 0%, var(--bg-card) 40%);
+      border-color: rgba(200, 150, 62, 0.3);
+      background: linear-gradient(180deg, rgba(200,150,62,0.04) 0%, var(--bg-card) 40%);
     }
     .product-card.featured:hover {
-      border-color: rgba(212, 168, 67, 0.35);
-      box-shadow: 0 20px 60px rgba(212, 168, 67, 0.1);
+      border-color: rgba(200, 150, 62, 0.5);
+      box-shadow: 0 16px 48px rgba(200,150,62,0.08);
     }
     .featured-badge {
       position: absolute;
@@ -329,7 +346,17 @@
       font-size: 4rem;
       margin-bottom: 1.5rem;
       display: block;
-      filter: drop-shadow(0 8px 24px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+      transition: transform var(--transition), filter var(--transition);
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .product-icon img, img.product-icon {
+      width: 140px;
+      height: 140px;
+      object-fit: contain;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.08));
+      transition: transform var(--transition), filter var(--transition);
     }
     .product-card h3 {
       font-family: 'Playfair Display', serif;
@@ -358,8 +385,8 @@
       font-size: 0.7rem;
       padding: 0.3rem 0.8rem;
       border-radius: 100px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.06);
       color: var(--text-muted);
       letter-spacing: 0.3px;
     }
@@ -377,24 +404,15 @@
     /* ── Story ── */
     .story {
       background: var(--bg-secondary);
-      border-radius: var(--radius-lg);
-      padding: 4rem;
-      margin: 0 auto 6rem;
-      max-width: var(--max-width);
+      border-radius: 0;
+      padding: 4rem 2rem;
+      margin: 0 0 6rem;
       position: relative;
       overflow: hidden;
     }
-    .story::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -20%;
-      width: 500px;
-      height: 500px;
-      background: radial-gradient(circle, rgba(212,168,67,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
     .story-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
       position: relative;
       z-index: 1;
     }
@@ -422,17 +440,24 @@
       text-align: center;
       padding: 2rem 1.5rem;
       background: var(--bg-card);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,0,0,0.05);
+      box-shadow: var(--shadow-sm);
       border-radius: var(--radius);
-      transition: border-color var(--transition);
+      transition: transform var(--transition), border-color var(--transition), box-shadow var(--transition);
     }
     .value-card:hover {
-      border-color: rgba(212, 168, 67, 0.25);
+      transform: translateY(-6px);
+      border-color: rgba(212, 168, 67, 0.35);
+      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    }
+    .value-card:hover .value-icon {
+      transform: scale(1.2);
     }
     .value-icon {
       font-size: 2.2rem;
       margin-bottom: 1rem;
       display: block;
+      transition: transform var(--transition);
     }
     .value-card h4 {
       font-weight: 700;
@@ -447,7 +472,7 @@
 
     /* ── Footer ── */
     footer {
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(0,0,0,0.06);
       padding: 4rem 2rem 2rem;
     }
     .footer-inner {
@@ -491,7 +516,7 @@
       max-width: var(--max-width);
       margin: 3rem auto 0;
       padding-top: 2rem;
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(0,0,0,0.05);
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -529,8 +554,10 @@
         <li><a href="#products">Products</a></li>
         <li><a href="#story">Our Story</a></li>
         <li><a href="#values">Values</a></li>
+        <li><a href="#map">Map</a></li>
         <li><a href="golden-eagle.html">Flavours</a></li>
-        <li><a href="runner-game.html">Game</a></li>
+        <li><a href="natural.html">Natural</a></li>
+        <li><a href="rush.html">Game</a></li>
       </ul>
     </div>
   </nav>
@@ -538,7 +565,7 @@
   <!-- Hero -->
   <section class="hero">
     <div class="hero-content">
-      <div class="hero-badge">Est. 1998</div>
+      <div class="hero-badge">Est. 1994</div>
       <h1>Taste the <span class="golden">Golden</span> Difference</h1>
       <p class="hero-tagline">
         Frutex crafts bold, refreshing beverages that fuel your ambition.
@@ -578,7 +605,7 @@
     </div>
     <div class="about-text">
       <span class="section-label">About Us</span>
-      <h2 class="section-title">Crafting Refreshment Since 1998</h2>
+      <h2 class="section-title">Crafting Refreshment Since 1994</h2>
       <p class="section-subtitle">
         Over two decades of innovation, passion, and the pursuit of the perfect sip.
         Frutex has become synonymous with quality, flavor, and the energy to seize
@@ -614,7 +641,7 @@
       <!-- Golden Eagle — Featured -->
       <div class="product-card featured">
         <span class="featured-badge">&#9733; Flagship</span>
-        <span class="product-icon">&#129413;</span>
+        <img src="product-eagle.png" class="product-icon" alt="Golden Eagle">
         <h3>Golden Eagle</h3>
         <p class="flavor">Citrus &#8226; Honey &#8226; Energy</p>
         <p class="desc">
@@ -632,27 +659,9 @@
         <a href="golden-eagle.html" class="card-link">Explore Flavours &#8594;</a>
       </div>
 
-      <!-- Frutti -->
-      <div class="product-card">
-        <span class="product-icon">&#127827;</span>
-        <h3>Frutti</h3>
-        <p class="flavor">Tropical Fruits &#8226; Berry &#8226; Refresh</p>
-        <p class="desc">
-          Bursting with the taste of sun-ripened strawberries, mango, and a
-          medley of tropical fruits. Frutti is pure joy in a bottle — light,
-          vibrant, and perfect for any time of day. No artificial colors, just
-          real fruit essence.
-        </p>
-        <div class="product-features">
-          <span class="feature-tag">Real Fruit Juice</span>
-          <span class="feature-tag">No Artificial Colors</span>
-          <span class="feature-tag">Vitamin C Rich</span>
-        </div>
-      </div>
-
       <!-- Relax -->
       <div class="product-card">
-        <span class="product-icon">&#127793;</span>
+        <img src="product-relax.png" class="product-icon" alt="Relax">
         <h3>Relax</h3>
         <p class="flavor">Herbal &#8226; Chamomile &#8226; Calm</p>
         <p class="desc">
@@ -666,11 +675,12 @@
           <span class="feature-tag">Herbal Infusion</span>
           <span class="feature-tag">Low Calorie</span>
         </div>
+        <a href="golden-eagle.html" class="card-link">Explore Flavours &#8594;</a>
       </div>
 
       <!-- Natural -->
       <div class="product-card">
-        <span class="product-icon">&#127807;</span>
+        <img src="product-natural.png" class="product-icon" alt="Natural">
         <h3>Natural</h3>
         <p class="flavor">Spring Water &#8226; Minerals &#8226; Pure</p>
         <p class="desc">
@@ -683,6 +693,25 @@
           <span class="feature-tag">Essential Minerals</span>
           <span class="feature-tag">Zero Calories</span>
         </div>
+        <a href="natural.html" class="card-link">Explore Flavours &#8594;</a>
+      </div>
+
+      <!-- Zeros -->
+      <div class="product-card">
+        <img src="product-zeros.png" class="product-icon" alt="Zeros">
+        <h3>Zeros</h3>
+        <p class="flavor">Zero Sugar &#8226; Zero Caffeine &#8226; Pure Taste</p>
+        <p class="desc">
+          The best of both worlds — all the great taste with absolutely nothing
+          to hold you back. Zero sugar, zero caffeine, zero compromises.
+          Just crisp, clean refreshment in every sip.
+        </p>
+        <div class="product-features">
+          <span class="feature-tag">0% Sugar</span>
+          <span class="feature-tag">0% Caffeine</span>
+          <span class="feature-tag">Natural Flavours</span>
+        </div>
+        <a href="golden-eagle.html" class="card-link">Explore Flavours &#8594;</a>
       </div>
 
     </div>
@@ -695,7 +724,7 @@
       <h2 class="section-title">From Garage to Global</h2>
       <div class="story-text">
         <p>
-          Frutex began in a small garage in 1998, when two university friends —
+          Frutex began in a small garage in 1994, when two university friends —
           a food scientist and a marketing graduate — decided the world deserved
           better drinks. Armed with little more than a blender, a notebook full of
           recipes, and an unshakable belief in their vision, they spent nights
@@ -710,8 +739,7 @@
         </p>
         <p>
           Today, Frutex operates in over 40 countries, employs more than 3,000
-          people, and continues to innovate. Frutti brought tropical joy to
-          millions. Relax redefined what a calming drink could be. But Golden Eagle
+          people, and continues to innovate. Relax redefined what a calming drink could be.
           remains our heart and soul — the one that started it all, and still the
           one our fans reach for when they need to soar.
         </p>
@@ -751,13 +779,50 @@
     </div>
   </section>
 
+  <!-- World Map Section -->
+  <section id="map">
+    <span class="section-label">Global Reach</span>
+    <h2 class="section-title">Golden Eagle Around the World</h2>
+    <p class="section-subtitle">
+      From our roots in Europe to shelves across six continents — Golden Eagle 
+      is soaring in 40+ countries and counting.
+    </p>
+
+    <div style="position:relative;width:100%;margin:0 auto;">
+      <canvas id="worldMap" style="width:100%;border-radius:var(--radius-lg);background:var(--bg-card);border:1px solid rgba(255,255,255,.06);"></canvas>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;margin-top:2rem;max-width:800px;margin-left:auto;margin-right:auto;">
+      <span class="feature-tag">🇺🇸 USA</span>
+      <span class="feature-tag">🇨🇦 Canada</span>
+      <span class="feature-tag">🇲🇽 Mexico</span>
+      <span class="feature-tag">🇧🇷 Brazil</span>
+      <span class="feature-tag">🇬🇧 UK</span>
+      <span class="feature-tag">🇩🇪 Germany</span>
+      <span class="feature-tag">🇫🇷 France</span>
+      <span class="feature-tag">🇪🇸 Spain</span>
+      <span class="feature-tag">🇮🇹 Italy</span>
+      <span class="feature-tag">🇳🇱 Netherlands</span>
+      <span class="feature-tag">🇯🇵 Japan</span>
+      <span class="feature-tag">🇰🇷 South Korea</span>
+      <span class="feature-tag">🇦🇺 Australia</span>
+      <span class="feature-tag">🇦🇪 UAE</span>
+      <span class="feature-tag">🇮🇳 India</span>
+      <span class="feature-tag">🇿🇦 South Africa</span>
+      <span class="feature-tag">🇸🇪 Sweden</span>
+      <span class="feature-tag">🇵🇱 Poland</span>
+      <span class="feature-tag">🇹🇷 Turkey</span>
+      <span class="feature-tag">🇦🇷 Argentina</span>
+    </div>
+  </section>
+
   <!-- Footer -->
   <footer>
     <div class="footer-inner">
       <div class="footer-brand">
         <span class="nav-logo">FRUTEX</span>
         <p>
-          Crafting bold, refreshing beverages since 1998. From our legendary
+          Crafting bold, refreshing beverages since 1994. From our legendary
           Golden Eagle to our vibrant fruit blends — every sip is a statement.
         </p>
       </div>
@@ -765,9 +830,9 @@
         <h4>Products</h4>
         <ul>
           <li><a href="#">Golden Eagle</a></li>
-          <li><a href="#">Frutti</a></li>
           <li><a href="#">Relax</a></li>
           <li><a href="#">Natural</a></li>
+          <li><a href="#">Zeros</a></li>
           <li><a href="#">Limited Editions</a></li>
         </ul>
       </div>
@@ -796,5 +861,92 @@
     </div>
   </footer>
 
+  <script>
+    (function(){
+      var mc=document.getElementById('worldMap'),mctx=mc.getContext('2d');
+      mc.width=900;mc.height=460;
+      function rm(){var cw=Math.min(900,window.innerWidth-64);mc.style.width=cw+'px';mc.style.height=(cw*460/900)+'px'}
+      rm();window.addEventListener('resize',rm);
+
+      // Continent outlines (simplified paths)
+      var continents=[
+        // North America
+        {path:[[80,80],[200,60],[280,80],[300,140],[260,220],[200,280],[140,300],[80,260],[60,180]],color:'#e8e4dc'},
+        // South America  
+        {path:[[160,310],[220,300],[240,340],[220,400],[180,440],[150,420],[140,360]],color:'#e8e4dc'},
+        // Europe
+        {path:[[420,80],[480,60],[540,80],[560,120],[540,160],[500,180],[460,190],[420,170],[400,130]],color:'#e8e4dc'},
+        // Africa
+        {path:[[400,200],[480,190],[540,210],[560,280],[540,350],[500,400],[440,410],[400,360],[380,280]],color:'#e8e4dc'},
+        // Asia
+        {path:[[550,70],[650,50],[750,60],[820,100],[830,160],[780,200],[700,220],[620,210],[560,190],[540,140]],color:'#e8e4dc'},
+        // Australia
+        {path:[[700,340],[760,330],[790,360],[770,400],[720,410],[680,390]],color:'#e8e4dc'}
+      ];
+
+      // Country dots (x,y on map)
+      var countries=[
+        {x:140,y:160,name:'USA'},{x:150,y:100,name:'Canada'},{x:120,y:220,name:'Mexico'},
+        {x:200,y:350,name:'Brazil'},{x:180,y:400,name:'Argentina'},
+        {x:450,y:110,name:'UK'},{x:470,y:130,name:'Germany'},{x:440,y:140,name:'France'},
+        {x:420,y:155,name:'Spain'},{x:490,y:145,name:'Italy'},{x:470,y:115,name:'Netherlands'},
+        {x:510,y:105,name:'Sweden'},{x:500,y:125,name:'Poland'},{x:530,y:150,name:'Turkey'},
+        {x:700,y:120,name:'Japan'},{x:710,y:140,name:'South Korea'},
+        {x:750,y:370,name:'Australia'},
+        {x:610,y:200,name:'UAE'},{x:630,y:230,name:'India'},
+        {x:460,y:360,name:'South Africa'}
+      ];
+
+      function drawMap(){
+        mctx.clearRect(0,0,900,460);
+        // Ocean bg
+        mctx.fillStyle='#f0ede6';mctx.fillRect(0,0,900,460);
+
+        // Grid lines
+        mctx.strokeStyle='rgba(0,0,0,.04)';mctx.lineWidth=.5;
+        for(var i=0;i<900;i+=40){mctx.beginPath();mctx.moveTo(i,0);mctx.lineTo(i,460);mctx.stroke()}
+        for(var i=0;i<460;i+=40){mctx.beginPath();mctx.moveTo(0,i);mctx.lineTo(900,i);mctx.stroke()}
+
+        // Continents
+        for(var c=0;c<continents.length;c++){
+          var con=continents[c];
+          mctx.beginPath();
+          mctx.moveTo(con.path[0][0],con.path[0][1]);
+          for(var p=1;p<con.path.length;p++)mctx.lineTo(con.path[p][0],con.path[p][1]);
+          mctx.closePath();
+          mctx.fillStyle=con.color;
+          mctx.fill();
+          mctx.strokeStyle='rgba(0,0,0,.08)';mctx.lineWidth=1;
+          mctx.stroke();
+        }
+
+        // Country dots
+        for(var d=0;d<countries.length;d++){
+          var co=countries[d];
+          // Pulse glow
+          var pulse=Math.sin(Date.now()*.003+d)*.3+.7;
+          mctx.fillStyle='rgba(212,168,67,'+pulse+')';
+          mctx.beginPath();mctx.arc(co.x,co.y,4,0,Math.PI*2);mctx.fill();
+          // Outer ring
+          mctx.strokeStyle='rgba(232,201,106,'+(pulse*.6)+')';
+          mctx.lineWidth=1;
+          mctx.beginPath();mctx.arc(co.x,co.y,7,0,Math.PI*2);mctx.stroke();
+          // Line to label
+          if(d%5===0){
+            mctx.fillStyle='rgba(0,0,0,.6)';mctx.font='bold 8px Inter';mctx.textAlign='left';
+            mctx.fillText(co.name,co.x+10,co.y+3);
+          }
+        }
+
+        // Legend
+        mctx.fillStyle='rgba(0,0,0,.5)';mctx.font='600 9px Inter';
+        mctx.fillText('● Golden Eagle available',20,440);
+        mctx.fillStyle='#d4a843';mctx.beginPath();mctx.arc(12,436,4,0,Math.PI*2);mctx.fill();
+
+        requestAnimationFrame(drawMap);
+      }
+      drawMap();
+    })();
+  </script>
 </body>
 </html>

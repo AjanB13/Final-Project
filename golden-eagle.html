@@ -73,8 +73,17 @@
       font-weight: 500;
       transition: color var(--transition);
       letter-spacing: 0.3px;
+      position: relative;
+    }
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 100%;
+      height: 2px; background: var(--gold);
+      transition: right var(--transition);
     }
     .nav-links a:hover { color: var(--gold-light); }
+    .nav-links a:hover::after { right: 0; }
 
     /* ── Page Hero ── */
     .page-hero {
@@ -201,9 +210,12 @@
       overflow: hidden;
     }
     .flavour-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(212, 168, 67, 0.2);
-      box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+      transform: translateY(-6px);
+      border-color: rgba(212, 168, 67, 0.3);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .flavour-card:hover .flavour-img {
+      transform: scale(1.05);
     }
     .flavour-card.classic {
       border-color: rgba(212, 168, 67, 0.25);
@@ -230,6 +242,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      transition: transform var(--transition);
     }
     .flavour-img.classic-img { background-image: url('classic.png'); }
     .flavour-img.red-img { background-image: url('red-edition.png'); }
@@ -359,7 +372,8 @@
         <li><a href="index.html#about">About</a></li>
         <li><a href="index.html#products">Products</a></li>
         <li><a href="golden-eagle.html" class="active">Flavours</a></li>
-        <li><a href="runner-game.html">Game</a></li>
+        <li><a href="natural.html">Natural</a></li>
+        <li><a href="rush.html">Game</a></li>
       </ul>
     </div>
   </nav>
