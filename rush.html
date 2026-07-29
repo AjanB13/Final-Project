@@ -97,7 +97,7 @@ var canImg=new Image();
 var bgImg=new Image();bgImg.src='game-bg.png';
 var selectedDrink='eagle';
 var drinkNames={eagle:'Golden Eagle',relax:'Relax',natural:'Natural',zeros:'Zeros'};
-var drinkImages={eagle:'product-eagle.png',relax:'product-relax.png',natural:'natural-can.png',zeros:'product-zeros.png'};
+var drinkImages={eagle:'product-eagle.png',relax:'product-relax.png',natural:'nat-strawberry.png',zeros:'product-zeros.png'};
 
 window.selectDrink=function(drink,el){
   selectedDrink=drink;canImg.src=drinkImages[drink];
@@ -260,6 +260,11 @@ function draw(){
     ctx.save();ctx.translate(px+player.w/2,py+player.h/2+(player.onGround?Math.sin(frame*.15)*1.5:0));
     ctx.scale(-1,player.sliding?.4:1);
     ctx.drawImage(sprite,-player.w/2,-player.h/2,player.w,player.h);
+    // Draw selected drink in hand
+    if(canImg.complete&&canImg.naturalWidth>0&&!player.sliding){
+      ctx.scale(-1,1);
+      ctx.drawImage(canImg,player.w*.15,player.h*.05,player.w*.5,player.w*.5);
+    }
     ctx.restore();
   }else{
     ctx.fillStyle='#d4a843';ctx.fillRect(px,py,player.w,player.sliding?player.h*.4:player.h);
