@@ -124,7 +124,12 @@
     var em=document.getElementById('loginEmail').value;
     var pw=document.getElementById('loginPass').value;
     var r=await sb.auth.signInWithPassword({email:em,password:pw});
-    if(r.error){ showMsg('loginMsg', r.error.message, 'error'); }
+    if(r.error){
+      var emsg=r.error.message;
+      if(r.error.status===400 && emsg.includes('Email not confirmed')) emsg='Check your email and click the confirmation link first.';
+      else if(r.error.status===400) emsg='Invalid email or password.';
+      showMsg('loginMsg', emsg, 'error');
+    }
     else{ showUser(r.data.user); showMsg('loginMsg', 'Signed in!', 'success'); }
   }
 
