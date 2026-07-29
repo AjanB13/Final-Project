@@ -44,20 +44,20 @@
 </div></nav>
 
 <div class="wrap">
-  <div class="hdr"><h1>Golden Eagle Parkour</h1><p>Jump across rooftops and collect Golden Eagle cans!</p></div>
+  <div class="hdr"><h1>Golden Eagle Parkour</h1><p>Jump across rooftops and collect Golden Eagle!</p></div>
   <div class="gc" style="width:100%;max-width:960px">
     <canvas id="g"></canvas>
     <div class="ov show" id="os">
       <h2>Golden Eagle Parkour</h2>
       <div class="tips">
         <strong>SPACE</strong> Jump &bull; <strong>SPACE x2</strong> Double Jump<br>
-        Jump across rooftops and collect <strong>Golden Eagle</strong> cans!
+        Jump across rooftops and collect <strong>Golden Eagle</strong>!
       </div>
       <button class="btn" onclick="start()">Start Running</button>
     </div>
     <div class="ov" id="oe">
       <h2>Game Over</h2>
-      <p class="sub">Score: <span id="fs">0</span> &nbsp; Cans: <span id="fc">0</span></p>
+      <p class="sub">Score: <span id="fs">0</span> &nbsp; Golden Eagle: <span id="fc">0</span></p>
       <button class="btn" onclick="start()">Run Again</button>
     </div>
   </div>
@@ -74,6 +74,7 @@ function rz(){var cw=Math.min(960,innerWidth-32);c.style.width=cw+'px';c.style.h
 rz();window.addEventListener('resize',rz);
 
 var sprite=new Image();sprite.src='runner.png';
+var canImg=new Image();canImg.src='product-eagle.png';
 var bgImg=new Image();bgImg.src='game-bg.png';
 var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
 
@@ -203,16 +204,20 @@ function draw(){
     ctx.beginPath();ctx.moveTo(px,p.y+p.h/2);ctx.lineTo(px+p.w,p.y+p.h/2);ctx.stroke();
   }
 
-  // Cans
+  // Golden Eagle cans
   for(var i=0;i<cans2.length;i++){
     var cn=cans2[i],cx=cn.x-camX,cy=cn.y+Math.sin(frame*.08+cn.b)*3;
     if(cx<-10||cx>W+10)continue;
-    var cg3=ctx.createLinearGradient(cx,cy-14,cx+12,cy+4);
-    cg3.addColorStop(0,'#f5d442');cg3.addColorStop(.5,'#d4a843');cg3.addColorStop(1,'#b8922e');
-    ctx.fillStyle=cg3;ctx.fillRect(cx,cy-14,12,18);
-    ctx.strokeStyle='#8b6914';ctx.lineWidth=.7;ctx.strokeRect(cx,cy-14,12,18);
-    ctx.fillStyle='#8b6914';ctx.fillRect(cx,cy-14,12,2.5);ctx.fillRect(cx,cy+1,12,2.5);
-    ctx.fillStyle='rgba(232,201,106,.1)';ctx.beginPath();ctx.arc(cx+6,cy-5,11,0,Math.PI*2);ctx.fill();
+    if(canImg.complete&&canImg.naturalWidth>0){
+      ctx.drawImage(canImg,cx-12,cy-18,24,30);
+    }else{
+      var cg3=ctx.createLinearGradient(cx,cy-14,cx+12,cy+4);
+      cg3.addColorStop(0,'#f5d442');cg3.addColorStop(.5,'#d4a843');cg3.addColorStop(1,'#b8922e');
+      ctx.fillStyle=cg3;ctx.fillRect(cx,cy-14,12,18);
+      ctx.strokeStyle='#8b6914';ctx.lineWidth=.7;ctx.strokeRect(cx,cy-14,12,18);
+      ctx.fillStyle='#8b6914';ctx.fillRect(cx,cy-14,12,2.5);ctx.fillRect(cx,cy+1,12,2.5);
+    }
+    ctx.fillStyle='rgba(232,201,106,.1)';ctx.beginPath();ctx.arc(cx+6,cy-5,14,0,Math.PI*2);ctx.fill();
   }
 
   // Player
@@ -241,7 +246,7 @@ function draw(){
   ctx.fillStyle='#fff';ctx.font='800 20px "Playfair Display",serif';ctx.textAlign='right';
   ctx.fillText(score,W-14,26);
   ctx.fillStyle='#f5c842';ctx.font='700 11px Inter';ctx.textAlign='right';
-  ctx.fillText(cans+' cans',W-14,42);
+  ctx.fillText(cans+' Golden Eagle',W-14,42);
   ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='600 8px Inter';
   ctx.fillText('BEST '+best,W-14,54);
 

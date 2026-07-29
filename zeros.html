@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zeros Flavours — Frutex</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f7f5f0;--bg2:#eeebe4;--card:#fff;--t1:#1a1a1a;--t2:#5a5a5a;--t3:#8a8a8a;--g:#c8963e;--gl:#d4a843;--gd:#a07828;--r:12px;--rl:20px;--mx:1200px;--tr:.3s cubic-bezier(.4,0,.2,1);--s1:0 2px 8px rgba(0,0,0,.04);--s2:0 8px 30px rgba(0,0,0,.06);--s3:0 16px 48px rgba(0,0,0,.08)}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:Inter,system-ui;background:var(--bg);color:var(--t1);min-height:100vh;display:flex;flex-direction:column}
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,0,0,.06)}
+    .ni{max-width:var(--mx);margin:0 auto;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:64px}
+    .nl{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;color:var(--g);letter-spacing:1px;text-decoration:none}
+    .nv{display:flex;gap:2rem;list-style:none}
+    .nv a{color:var(--t2);text-decoration:none;font-size:.9rem;font-weight:500;position:relative;transition:color var(--tr)}
+    .nv a::after{content:'';position:absolute;bottom:-4px;left:0;right:100%;height:2px;background:var(--g);transition:right var(--tr)}
+    .nv a:hover{color:var(--gl)}.nv a:hover::after{right:0}.nv a.active{color:var(--gl);border-bottom:2px solid var(--g);padding-bottom:2px}
+
+    .ph{min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 3rem;background:linear-gradient(180deg,rgba(200,120,60,.06) 0%,transparent 60%)}
+    .hc{max-width:800px}
+    .hb{display:inline-block;padding:.4rem 1.2rem;border:1px solid rgba(200,120,60,.3);border-radius:100px;color:#c8783c;font-size:.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;background:rgba(200,120,60,.04)}
+    .ph h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.1;margin-bottom:.8rem}
+    .ph h1 .gn{background:linear-gradient(135deg,#e8743c,#d06030,#c05020);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hs{color:var(--t2);font-size:1rem;max-width:500px;margin:0 auto;line-height:1.7}
+
+    .bl{display:inline-flex;align-items:center;gap:.5rem;color:var(--t3);text-decoration:none;font-size:.82rem;font-weight:500;padding:1.5rem 2rem;max-width:var(--mx);margin:0 auto;transition:color var(--tr)}.bl:hover{color:var(--g)}
+
+    section{padding:4rem 2rem;max-width:var(--mx);margin:0 auto}
+    .sl{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#c8783c;margin-bottom:1rem}
+    .st{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.2;margin-bottom:.8rem}
+    .ss{color:var(--t2);font-size:1rem;max-width:550px;margin-bottom:2.5rem;line-height:1.7}
+
+    .fg{display:grid;grid-template-columns:1fr;max-width:380px;margin:0 auto;gap:1.5rem}
+    .fc{background:var(--card);border:1px solid rgba(0,0,0,.05);box-shadow:var(--s1);border-radius:var(--rl);padding:2rem 1.8rem;text-align:center;transition:transform var(--tr),border-color var(--tr),box-shadow var(--tr)}
+    .fc:hover{transform:translateY(-6px);border-color:rgba(200,120,60,.3);box-shadow:var(--s3)}
+    .fc:hover .fi{transform:scale(1.05)}
+    .fi{width:100%;height:160px;border-radius:var(--r);margin-bottom:1.2rem;background-size:cover;background-position:center;background-repeat:no-repeat;transition:transform var(--tr)}
+    .fi.z1{background-image:url('product-zeros.png')}.fi.z2{background-image:url('product-zeros.png')}.fi.z3{background-image:url('product-zeros.png')}
+    .fi.z4{background-image:url('product-zeros.png')}.fi.z5{background-image:url('product-zeros.png')}.fi.z6{background-image:url('product-zeros.png')}
+    .fc h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.3rem}
+    .fc .pr{color:var(--t3);font-size:.78rem;margin-bottom:.8rem}
+    .fc .ds{color:var(--t2);font-size:.82rem;line-height:1.6}
+    .ft{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:1rem}
+    .ft span{font-size:.65rem;padding:.25rem .7rem;border-radius:100px;background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.05);color:var(--t3)}
+
+    .cta{text-align:center;padding:3rem 2rem 5rem}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.8rem;background:linear-gradient(135deg,#e8743c,#d06030);color:#fff;font-weight:700;font-size:.95rem;text-decoration:none;border-radius:100px;transition:transform var(--tr),box-shadow var(--tr)}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(232,116,60,.3)}
+
+    footer{border-top:1px solid rgba(0,0,0,.06);padding:2.5rem 2rem;text-align:center;color:var(--t3);font-size:.72rem}
+
+    @media(max-width:900px){.fg{max-width:100%}section{padding:3rem 1.5rem}}
+    @media(max-width:600px){.nv{display:none}}
+  </style>
+</head>
+<body>
+<nav><div class="ni">
+  <a href="index.html" class="nl">FRUTEX</a>
+  <ul class="nv">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="index.html#about">About</a></li>
+    <li><a href="index.html#products">Products</a></li>
+    <li><a href="golden-eagle.html">Flavours</a></li>
+    <li><a href="natural.html">Natural</a></li>
+    <li><a href="relax.html">Relax</a></li>
+    <li><a href="zeros.html" class="active">Zeros</a></li>
+    <li><a href="rush.html">Game</a></li>
+  </ul>
+</div></nav>
+
+<section class="ph"><div class="hc">
+  <div class="hb">Zeros Range</div>
+  <h1><span class="gn">Zeros</span> Flavours</h1>
+  <p class="hs">Zero sugar, zero caffeine, 100% natural taste — one perfect formula for pure refreshment.</p>
+</div></section>
+
+<a href="index.html" class="bl">← Back to Frutex</a>
+
+<section id="flavours">
+  <span class="sl">The Collection</span>
+  <h2 class="st">One Formula, Zero Compromise</h2>
+  <p class="ss">The only Zeros you'll ever need — 0% sugar, 0% caffeine, and 100% natural taste in every sip.</p>
+  <div class="fg">
+    <div class="fc"><div class="fi z1"></div><h3>Original</h3><p class="pr">Crisp • Clean • Classic</p><p class="ds">The one that proves zero can mean everything. A clean, crisp taste with no sugar, no caffeine — just pure refreshment.</p><div class="ft"><span>0% Sugar</span><span>0% Caffeine</span><span>Natural Flavours</span></div></div>
+  </div>
+</section>
+
+<div class="cta"><a href="index.html#products" class="btn">View All Frutex Products →</a></div>
+
+<footer>&copy; 2026 Frutex Beverages &bull; Zero Compromise</footer>
+</body>
+</html>

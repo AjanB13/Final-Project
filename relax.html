@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Natural Flavours — Frutex</title>
+  <title>Relax Flavours — Frutex</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     :root{--bg:#f7f5f0;--bg2:#eeebe4;--card:#fff;--t1:#1a1a1a;--t2:#5a5a5a;--t3:#8a8a8a;--g:#c8963e;--gl:#d4a843;--gd:#a07828;--r:12px;--rl:20px;--mx:1200px;--tr:.3s cubic-bezier(.4,0,.2,1);--s1:0 2px 8px rgba(0,0,0,.04);--s2:0 8px 30px rgba(0,0,0,.06);--s3:0 16px 48px rgba(0,0,0,.08)}
@@ -17,27 +17,27 @@
     .nv a::after{content:'';position:absolute;bottom:-4px;left:0;right:100%;height:2px;background:var(--g);transition:right var(--tr)}
     .nv a:hover{color:var(--gl)}.nv a:hover::after{right:0}.nv a.active{color:var(--gl);border-bottom:2px solid var(--g);padding-bottom:2px}
 
-    .ph{min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 3rem;background:linear-gradient(180deg,rgba(74,158,138,.06) 0%,transparent 60%)}
+    .ph{min-height:50vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:8rem 2rem 3rem;background:linear-gradient(180deg,rgba(180,140,160,.06) 0%,transparent 60%)}
     .hc{max-width:800px}
-    .hb{display:inline-block;padding:.4rem 1.2rem;border:1px solid rgba(74,158,138,.3);border-radius:100px;color:#3a8a78;font-size:.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;background:rgba(74,158,138,.04)}
+    .hb{display:inline-block;padding:.4rem 1.2rem;border:1px solid rgba(180,140,160,.3);border-radius:100px;color:#8a6a9a;font-size:.75rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;background:rgba(180,140,160,.04)}
     .ph h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,6vw,4rem);font-weight:900;line-height:1.1;margin-bottom:.8rem}
-    .ph h1 .gn{background:linear-gradient(135deg,#4a9e8a,#3a8a78,#2a7a68);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .ph h1 .gn{background:linear-gradient(135deg,#9a7aaa,#8a6a9a,#7a5a8a);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
     .hs{color:var(--t2);font-size:1rem;max-width:500px;margin:0 auto;line-height:1.7}
 
     .bl{display:inline-flex;align-items:center;gap:.5rem;color:var(--t3);text-decoration:none;font-size:.82rem;font-weight:500;padding:1.5rem 2rem;max-width:var(--mx);margin:0 auto;transition:color var(--tr)}.bl:hover{color:var(--g)}
 
     section{padding:4rem 2rem;max-width:var(--mx);margin:0 auto}
-    .sl{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3a8a78;margin-bottom:1rem}
+    .sl{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8a6a9a;margin-bottom:1rem}
     .st{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;line-height:1.2;margin-bottom:.8rem}
     .ss{color:var(--t2);font-size:1rem;max-width:550px;margin-bottom:2.5rem;line-height:1.7}
 
     .fg{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
     .fc{background:var(--card);border:1px solid rgba(0,0,0,.05);box-shadow:var(--s1);border-radius:var(--rl);padding:2rem 1.8rem;text-align:center;transition:transform var(--tr),border-color var(--tr),box-shadow var(--tr)}
-    .fc:hover{transform:translateY(-6px);border-color:rgba(74,158,138,.3);box-shadow:var(--s3)}
+    .fc:hover{transform:translateY(-6px);border-color:rgba(154,122,170,.3);box-shadow:var(--s3)}
     .fc:hover .fi{transform:scale(1.05)}
     .fi{width:100%;height:160px;border-radius:var(--r);margin-bottom:1.2rem;background-size:cover;background-position:center;background-repeat:no-repeat;transition:transform var(--tr)}
-    .fi.a1{background-image:url('nat-apple.png')}.fi.a2{background-image:url('nat-blueberry.png')}.fi.a3{background-image:url('nat-carrot.png')}
-    .fi.a4{background-image:url('nat-cherry.png')}.fi.a5{background-image:url('nat-strawberry.png')}.fi.a6{background-image:url('nat-pear.png')}
+    .fi.r1{background-image:url('relax-mango.png')}.fi.r2{background-image:url('relax-apple.png')}.fi.r3{background-image:url('relax-blueberry.png')}
+    .fi.r4{background-image:url('relax-icetea.png')}.fi.r5{background-image:url('relax-lemonade.png')}.fi.r6{background-image:url('relax-multired.png')}
     .fc h3{font-family:'Playfair Display',serif;font-size:1.3rem;margin-bottom:.3rem}
     .fc .pr{color:var(--t3);font-size:.78rem;margin-bottom:.8rem}
     .fc .ds{color:var(--t2);font-size:.82rem;line-height:1.6}
@@ -45,8 +45,8 @@
     .ft span{font-size:.65rem;padding:.25rem .7rem;border-radius:100px;background:rgba(0,0,0,.03);border:1px solid rgba(0,0,0,.05);color:var(--t3)}
 
     .cta{text-align:center;padding:3rem 2rem 5rem}
-    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.8rem;background:linear-gradient(135deg,#4a9e8a,#3a8a78);color:#fff;font-weight:700;font-size:.95rem;text-decoration:none;border-radius:100px;transition:transform var(--tr),box-shadow var(--tr)}
-    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(74,158,138,.3)}
+    .btn{display:inline-flex;align-items:center;gap:.5rem;padding:.7rem 1.8rem;background:linear-gradient(135deg,#9a7aaa,#8a6a9a);color:#fff;font-weight:700;font-size:.95rem;text-decoration:none;border-radius:100px;transition:transform var(--tr),box-shadow var(--tr)}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(154,122,170,.3)}
 
     footer{border-top:1px solid rgba(0,0,0,.06);padding:2.5rem 2rem;text-align:center;color:var(--t3);font-size:.72rem}
 
@@ -62,37 +62,37 @@
     <li><a href="index.html#about">About</a></li>
     <li><a href="index.html#products">Products</a></li>
     <li><a href="golden-eagle.html">Flavours</a></li>
-    <li><a href="natural.html" class="active">Natural</a></li>
-    <li><a href="relax.html">Relax</a></li>
+    <li><a href="natural.html">Natural</a></li>
+    <li><a href="relax.html" class="active">Relax</a></li>
     <li><a href="zeros.html">Zeros</a></li>
     <li><a href="rush.html">Game</a></li>
   </ul>
 </div></nav>
 
 <section class="ph"><div class="hc">
-  <div class="hb">Natural Range</div>
-  <h1><span class="gn">Natural</span> Flavours</h1>
-  <p class="hs">Six pure fruit infusions — no sugar, no caffeine, just nature's best in every bottle.</p>
+  <div class="hb">Relax Range</div>
+  <h1><span class="gn">Relax</span> Flavours</h1>
+  <p class="hs">Six soothing blends crafted to help you unwind — from herbal infusions to refreshing fruit coolers.</p>
 </div></section>
 
 <a href="index.html" class="bl">← Back to Frutex</a>
 
 <section id="flavours">
   <span class="sl">The Collection</span>
-  <h2 class="st">Pure Fruit, Pure Taste</h2>
-  <p class="ss">Each Natural variant is made with real fruit juice, spring water, and essential minerals — nothing else.</p>
+  <h2 class="st">Unwind Your Way</h2>
+  <p class="ss">Each Relax blend is caffeine-free and crafted with natural ingredients for a moment of calm in every sip.</p>
   <div class="fg">
-    <div class="fc"><div class="fi a1"></div><h3>Apple</h3><p class="pr">Crisp • Sweet • Classic</p><p class="ds">The crisp taste of freshly picked apples. Light, refreshing, and naturally sweet — a timeless favourite.</p><div class="ft"><span>Real Apple Juice</span><span>Vitamin C</span><span>No Added Sugar</span></div></div>
-    <div class="fc"><div class="fi a2"></div><h3>Blueberry</h3><p class="pr">Rich • Tart • Antioxidant</p><p class="ds">Bursting with wild blueberries. Deep, rich flavour packed with natural antioxidants for a healthy boost.</p><div class="ft"><span>Wild Blueberries</span><span>Antioxidants</span><span>Low Calorie</span></div></div>
-    <div class="fc"><div class="fi a3"></div><h3>Carrot</h3><p class="pr">Earthy • Smooth • Nutritious</p><p class="ds">A surprisingly delicious blend of fresh carrots with a hint of natural sweetness. Full of beta-carotene and sunshine.</p><div class="ft"><span>Real Carrot Juice</span><span>Beta-Carotene</span><span>Vitamin A</span></div></div>
-    <div class="fc"><div class="fi a4"></div><h3>Sour Cherry</h3><p class="pr">Tart • Bold • Refreshing</p><p class="ds">A punchy, tangy burst of sour cherries. Bold and invigorating — for those who like their refreshment with attitude.</p><div class="ft"><span>Real Cherry Juice</span><span>Natural Tartness</span><span>Melatonin Rich</span></div></div>
-    <div class="fc"><div class="fi a5"></div><h3>Strawberry</h3><p class="pr">Sweet • Juicy • Summer</p><p class="ds">Sun-ripened strawberries in every sip. Sweet, juicy, and irresistibly smooth — like summer in a bottle.</p><div class="ft"><span>Real Strawberry</span><span>Vitamin C</span><span>No Artificial Colours</span></div></div>
-    <div class="fc"><div class="fi a6"></div><h3>Pear</h3><p class="pr">Mellow • Soft • Elegant</p><p class="ds">The gentle sweetness of ripe pears. Mellow, soft, and perfectly balanced — an elegant choice for any moment.</p><div class="ft"><span>Real Pear Juice</span><span>Natural Sweetness</span><span>Smooth Finish</span></div></div>
+    <div class="fc"><div class="fi r1"></div><h3>Mango</h3><p class="pr">Tropical • Smooth • Calm</p><p class="ds">The sweet, velvety taste of ripe mangoes blended into a smooth, soothing drink. A tropical escape in every sip.</p><div class="ft"><span>Real Mango</span><span>Caffeine Free</span><span>Tropical Escape</span></div></div>
+    <div class="fc"><div class="fi r2"></div><h3>Apple</h3><p class="pr">Crisp • Light • Soothing</p><p class="ds">The crisp, clean taste of fresh apples with a gentle herbal finish. Light, refreshing, and perfectly calming.</p><div class="ft"><span>Real Apple</span><span>Herbal Infusion</span><span>Light & Fresh</span></div></div>
+    <div class="fc"><div class="fi r3"></div><h3>Blueberry</h3><p class="pr">Rich • Fruity • Mellow</p><p class="ds">Deep blueberry notes blended with calming herbs. A rich, fruity infusion that helps you relax and recharge.</p><div class="ft"><span>Wild Blueberry</span><span>Antioxidants</span><span>Deep Flavour</span></div></div>
+    <div class="fc"><div class="fi r4"></div><h3>Ice Tea</h3><p class="pr">Classic • Refreshing • Cool</p><p class="ds">A timeless blend of premium tea leaves with a hint of citrus. Cool, crisp, and endlessly refreshing — the perfect any-time drink.</p><div class="ft"><span>Premium Tea</span><span>Citrus Notes</span><span>Caffeine Free</span></div></div>
+    <div class="fc"><div class="fi r5"></div><h3>Lemonade</h3><p class="pr">Zesty • Bright • Uplifting</p><p class="ds">Sunshine in a bottle. Freshly squeezed lemonade with just the right balance of tart and sweet — an instant mood lifter.</p><div class="ft"><span>Real Lemon</span><span>No Caffeine</span><span>Vitamin C</span></div></div>
+    <div class="fc"><div class="fi r6"></div><h3>Multi Red</h3><p class="pr">Berry Mix • Bold • Invigorating</p><p class="ds">A vibrant blend of red berries — strawberry, raspberry, and cherry — with a touch of hibiscus. Bold, beautiful, and bursting with flavour.</p><div class="ft"><span>Red Berries</span><span>Hibiscus</span><span>No Added Sugar</span></div></div>
   </div>
 </section>
 
 <div class="cta"><a href="index.html#products" class="btn">View All Frutex Products →</a></div>
 
-<footer>&copy; 2026 Frutex Beverages &bull; Crafted with Nature</footer>
+<footer>&copy; 2026 Frutex Beverages &bull; Crafted for Calm</footer>
 </body>
 </html>
