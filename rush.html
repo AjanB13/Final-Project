@@ -49,34 +49,16 @@
   <div class="gc" style="width:100%;max-width:960px">
     <canvas id="g"></canvas>
     <div class="ov show" id="os">
-      <h2>Choose Your Drink</h2>
-      <div id="drinkSelect" style="display:flex;gap:1rem;justify-content:center;margin-bottom:1.2rem;flex-wrap:wrap;">
-        <div class="drink-opt" data-drink="eagle" style="cursor:pointer;text-align:center;padding:.6rem;border-radius:12px;border:2px solid transparent;transition:all .3s;width:90px;" onclick="selectDrink('eagle',this)">
-          <img src="product-eagle.png" style="width:70px;height:70px;object-fit:contain;"><br>
-          <span style="font-size:.7rem;font-weight:600;">Golden Eagle</span>
-        </div>
-        <div class="drink-opt" data-drink="relax" style="cursor:pointer;text-align:center;padding:.6rem;border-radius:12px;border:2px solid transparent;transition:all .3s;width:90px;" onclick="selectDrink('relax',this)">
-          <img src="product-relax.png" style="width:70px;height:70px;object-fit:contain;"><br>
-          <span style="font-size:.7rem;font-weight:600;">Relax</span>
-        </div>
-        <div class="drink-opt" data-drink="natural" style="cursor:pointer;text-align:center;padding:.6rem;border-radius:12px;border:2px solid transparent;transition:all .3s;width:90px;" onclick="selectDrink('natural',this)">
-          <img src="nat-strawberry.png" style="width:70px;height:70px;object-fit:contain;"><br>
-          <span style="font-size:.7rem;font-weight:600;">Natural</span>
-        </div>
-        <div class="drink-opt" data-drink="zeros" style="cursor:pointer;text-align:center;padding:.6rem;border-radius:12px;border:2px solid transparent;transition:all .3s;width:90px;" onclick="selectDrink('zeros',this)">
-          <img src="product-zeros.png" style="width:70px;height:70px;object-fit:contain;"><br>
-          <span style="font-size:.7rem;font-weight:600;">Zeros</span>
-        </div>
-      </div>
+      <h2>Golden Eagle Parkour</h2>
       <div class="tips">
         <strong>SPACE</strong> Jump &bull; <strong>SPACE x2</strong> Double Jump<br>
-        Collect your chosen drink across the rooftops!
+        Jump across rooftops and collect <strong>Golden Eagle</strong>!
       </div>
-      <button class="btn" id="btnStart" onclick="start()" disabled style="opacity:.5;">Pick a drink first</button>
+      <button class="btn" onclick="start()">Start Running</button>
     </div>
     <div class="ov" id="oe">
       <h2>Game Over</h2>
-      <p class="sub">Score: <span id="fs">0</span> &nbsp; <span id="drinkLabel">Golden Eagle</span>: <span id="fc">0</span></p>
+      <p class="sub">Score: <span id="fs">0</span> &nbsp; Golden Eagle: <span id="fc">0</span></p>
       <button class="btn" onclick="start()">Run Again</button>
     </div>
   </div>
@@ -93,19 +75,8 @@ function rz(){var cw=Math.min(960,innerWidth-32);c.style.width=cw+'px';c.style.h
 rz();window.addEventListener('resize',rz);
 
 var sprite=new Image();sprite.src='runner.png';
-var canImg=new Image();
+var canImg=new Image();canImg.src='product-eagle.png';
 var bgImg=new Image();bgImg.src='game-bg.png';
-var selectedDrink='eagle';
-var drinkNames={eagle:'Golden Eagle',relax:'Relax',natural:'Natural',zeros:'Zeros'};
-var drinkImages={eagle:'product-eagle.png',relax:'product-relax.png',natural:'nat-strawberry.png',zeros:'product-zeros.png'};
-
-window.selectDrink=function(drink,el){
-  selectedDrink=drink;canImg.src=drinkImages[drink];
-  document.querySelectorAll('.drink-opt').forEach(function(d){d.style.border='2px solid transparent'});
-  el.style.border='2px solid #d4a843';
-  var btn=document.getElementById('btnStart');
-  btn.disabled=false;btn.style.opacity='1';btn.textContent='Start Running';
-};
 var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
 
 var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
@@ -260,11 +231,6 @@ function draw(){
     ctx.save();ctx.translate(px+player.w/2,py+player.h/2+(player.onGround?Math.sin(frame*.15)*1.5:0));
     ctx.scale(-1,player.sliding?.4:1);
     ctx.drawImage(sprite,-player.w/2,-player.h/2,player.w,player.h);
-    // Draw selected drink in hand
-    if(canImg.complete&&canImg.naturalWidth>0&&!player.sliding){
-      ctx.scale(-1,1); // flip back for can
-      ctx.drawImage(canImg,player.w*.15,player.h*.05,player.w*.5,player.w*.5);
-    }
     ctx.restore();
   }else{
     ctx.fillStyle='#d4a843';ctx.fillRect(px,py,player.w,player.sliding?player.h*.4:player.h);
@@ -280,7 +246,7 @@ function draw(){
   ctx.fillStyle='#fff';ctx.font='800 20px "Playfair Display",serif';ctx.textAlign='right';
   ctx.fillText(score,W-14,26);
   ctx.fillStyle='#f5c842';ctx.font='700 11px Inter';ctx.textAlign='right';
-  ctx.fillText(cans+' '+drinkNames[selectedDrink],W-14,42);
+  ctx.fillText(cans+' Golden Eagle',W-14,42);
   ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='600 8px Inter';
   ctx.fillText('BEST '+best,W-14,54);
 
@@ -300,7 +266,6 @@ function endGame(){
 
 window.start=function(){
   reset();os.classList.remove('show');oe.classList.remove('show');
-  document.getElementById('drinkLabel').textContent=drinkNames[selectedDrink];
   running=true;if(animId)cancelAnimationFrame(animId);loop();
 };
 })();
