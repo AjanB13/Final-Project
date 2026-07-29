@@ -134,7 +134,12 @@
     var em=document.getElementById('signupEmail').value;
     var pw=document.getElementById('signupPass').value;
     var r=await sb.auth.signUp({email:em,password:pw,options:{data:{full_name:nm}}});
-    if(r.error){ showMsg('signupMsg', r.error.message, 'error'); }
+    if(r.error){
+      var emsg=r.error.message;
+      if(r.error.status===429) emsg='Too many attempts. Wait a minute and try again.';
+      else if(emsg.includes('rate limit')) emsg='Rate limit reached — try again in 60 seconds.';
+      showMsg('signupMsg', emsg, 'error');
+    }
     else{ showMsg('signupMsg', 'Check your email to confirm!', 'success'); }
   }
 
