@@ -152,8 +152,6 @@ function update(){
   player.x+=speed;
   camX+=(player.x-150-camX)*.12;
 
-  // Score
-  score=Math.max(score,Math.floor(player.x/24));
   speed=4+Math.floor(player.x/700)*.4;if(speed>10)speed=10;
 
   // Spawn
@@ -171,6 +169,7 @@ function update(){
 
   // Fall death
   if(player.y>GROUND+120){endGame();return}
+  score=Math.max(score,Math.floor(player.x/24));
   frame++;
 }
 
