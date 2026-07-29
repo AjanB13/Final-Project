@@ -145,7 +145,12 @@
       else if(emsg.includes('rate limit')) emsg='Rate limit reached — try again in 60 seconds.';
       showMsg('signupMsg', emsg, 'error');
     }
-    else{ showMsg('signupMsg', 'Check your email to confirm!', 'success'); }
+    else{
+      showMsg('signupMsg', 'Registration successful!', 'success');
+      // Auto-login if session returned (email confirm is off)
+      if(r.data.session){ showUser(r.data.user); }
+      else{ setTimeout(function(){switchTab('login')}, 1500); }
+    }
   }
 
   function showUser(user){
