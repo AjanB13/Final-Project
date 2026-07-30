@@ -213,9 +213,9 @@ function update(){
     // Level 1: eagle stays high and far, can't reach you
     var eagleY=level===1?GROUND-240:GROUND-160-Math.sin(frame*.04)*40;
     enemy.y+= (eagleY-enemy.y)*0.08;
-    // Only kill on direct contact (not near)
-    var ex=enemy.x-camX;
-    if(ex>-20&&ex<player.x+player.w-20&&enemy.y>player.y-10&&enemy.y<player.y+player.h-10){
+    // Only kill on direct contact — eagle sprite must overlap player
+    var ex=enemy.x-camX, px2=player.x-camX;
+    if(ex+60>px2&&ex<px2+player.w&&enemy.y+30>player.y&&enemy.y<player.y+player.h){
       endGame();return;
     }
     if(enemy.x<player.x-500){enemy.x=player.x+800+Math.random()*400;}
