@@ -94,6 +94,7 @@ rz();window.addEventListener('resize',rz);
 
 var sprite=new Image();sprite.src='runner.png';
 var canImg=new Image();
+var enemyImg=new Image();enemyImg.src='enemy-eagle.png';
 var bgImg=new Image();bgImg.src='game-bg.png';
 var selectedDrink='eagle';
 var drinkNames={eagle:'Golden Eagle',relax:'Relax',natural:'Natural',zeros:'Zeros'};
@@ -110,6 +111,7 @@ var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=docum
 
 var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
 var level=1,targetScore=250;
+var enemy={x:0,y:0,active:false,timer:0};
 var speed=5,frame=0,animId,camX=0;
 
 var G=0.6,JUMP=-11.5;
@@ -137,6 +139,7 @@ function reset(){
   for(var i=0;i<8;i++)spawnPlat(nextX);
   player.x=150;player.y=GROUND-player.h;player.vy=0;player.jumps=0;player.sliding=false;player.slideT=0;player.onGround=true;
   score=0;cans=0;level=1;targetScore=250;speed=4;frame=0;camX=0;
+  enemy={x:W+200,y:GROUND-180,active:true,timer:0};
 }
 reset();
 
@@ -202,6 +205,18 @@ function update(){
   if(player.y>GROUND+120){endGame();return}
   score=Math.max(score,Math.floor(player.x/24));
   if(score>=targetScore){level++;targetScore+=250;score=0;}
+
+  // Enemy eagle
+  if(enemy.active){
+    enemy.x-=speed*1.1;
+    enemy.y=GROUND-160-Math.sin(frame*.04)*40;
+    // Collision with player
+    var ex=enemy.x-camX,ey=enemy.y;
+    if(ex>-50&&ex<player.x+player.w+50&&ey>player.y-40&&ey<player.y+player.h+40){
+      endGame();return;
+    }
+    if(enemy.x<player.x-500){enemy.x=player.x+800+Math.random()*400;}
+  }
   frame++;
 }
 
@@ -249,6 +264,14 @@ function draw(){
       ctx.fillStyle='#8b6914';ctx.fillRect(cx,cy-14,12,2.5);ctx.fillRect(cx,cy+1,12,2.5);
     }
     ctx.fillStyle='rgba(232,201,106,.1)';ctx.beginPath();ctx.arc(cx+6,cy-5,14,0,Math.PI*2);ctx.fill();
+  }
+
+  // Enemy eagle
+  if(enemy.active&&enemyImg.complete&&enemyImg.naturalWidth>0){
+    var ee=enemy.x-camX;
+    if(ee>-100&&ee<W+100){
+      ctx.drawImage(enemyImg,ee-40,enemy.y-30,80,60);
+    }
   }
 
   // Player
