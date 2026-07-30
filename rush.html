@@ -109,6 +109,7 @@ window.selectDrink=function(drink,el){
 var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
 
 var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
+var level=1,targetScore=250;
 var speed=5,frame=0,animId,camX=0;
 
 var G=0.6,JUMP=-11.5;
@@ -135,7 +136,7 @@ function reset(){
   plats=[{x:0,y:GROUND,w:350,h:20}];cans2=[];nextX=280;
   for(var i=0;i<8;i++)spawnPlat(nextX);
   player.x=150;player.y=GROUND-player.h;player.vy=0;player.jumps=0;player.sliding=false;player.slideT=0;player.onGround=true;
-  score=0;cans=0;speed=4;frame=0;camX=0;
+  score=0;cans=0;level=1;targetScore=250;speed=4;frame=0;camX=0;
 }
 reset();
 
@@ -200,6 +201,7 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.max(score,Math.floor(player.x/24));
+  if(score>=targetScore){level++;targetScore+=250;score=0;}
   frame++;
 }
 
@@ -275,9 +277,11 @@ function draw(){
   ctx.fillStyle='#fff';ctx.font='800 20px "Playfair Display",serif';ctx.textAlign='right';
   ctx.fillText(score,W-14,26);
   ctx.fillStyle='#f5c842';ctx.font='700 11px Inter';ctx.textAlign='right';
-  ctx.fillText(cans+' '+drinkNames[selectedDrink],W-14,42);
+  ctx.fillText('Level '+level+': '+score+'/'+targetScore,W-14,42);
+  ctx.fillStyle='#f5c842';ctx.font='600 9px Inter';ctx.textAlign='right';
+  ctx.fillText(cans+' collected',W-14,55);
   ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='600 8px Inter';
-  ctx.fillText('BEST '+best,W-14,54);
+  ctx.fillText('BEST '+best,W-14,66);
 
   ctx.fillStyle='rgba(255,255,255,.1)';ctx.font='8px Inter';ctx.textAlign='center';
   ctx.fillText('SPACE jump(x2)  Auto-run',W/2,H-6);
@@ -289,7 +293,7 @@ function endGame(){
   running=false;
   var fs=score+cans*10;
   if(fs>best){best=fs;localStorage.setItem('parkBest',best)}
-  fsEl.textContent=fs;fcEl.textContent=cans;
+  fsEl.textContent=fs+' (Level '+level+')';fcEl.textContent=cans;
   oe.classList.add('show');
 }
 
