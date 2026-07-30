@@ -286,7 +286,8 @@ function draw(){
 
   if(sprite.complete&&sprite.naturalWidth>0){
     ctx.save();ctx.translate(px+player.w/2,py+player.h/2+(player.onGround?Math.sin(frame*.15)*1.5:0));
-    ctx.scale(-1,player.sliding?.4:1);
+    ctx.scale(-1,player.sliding?.65:1);
+    if(player.sliding){ctx.translate(0,player.h*.15)}
     ctx.drawImage(sprite,-player.w/2,-player.h/2,player.w,player.h);
     ctx.restore();
   }else{
