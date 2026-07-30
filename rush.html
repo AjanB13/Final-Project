@@ -172,13 +172,13 @@ function update(){
   if(player.sliding){player.slideT--;if(player.slideT<=0)player.sliding=false}
 
   // Platform collision
-  var ph=player.sliding?player.h*.4:player.h;
+  var ph=player.h;
   var py2=player.y+ph;
   player.onGround=false;
   for(var i=0;i<plats.length;i++){
     var p=plats[i];
     if(player.x+player.w>p.x&&player.x<p.x+p.w&&py2>=p.y-5&&py2<=p.y+15&&player.vy>=0){
-      player.y=p.y-ph;player.vy=0;player.jumps=0;player.sliding=false;player.onGround=true;break;
+      player.y=p.y-ph;player.vy=0;player.jumps=0;player.onGround=true;break;
     }
   }
 
