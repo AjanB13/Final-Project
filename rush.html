@@ -208,11 +208,14 @@ function update(){
 
   // Enemy eagle
   if(enemy.active){
-    enemy.x-=speed*1.1;
+    var eagleSpeed=0.6+level*0.15;if(eagleSpeed>1.3)eagleSpeed=1.3;
+    enemy.x-=speed*eagleSpeed;
     enemy.y=GROUND-160-Math.sin(frame*.04)*40;
-    // Collision with player
-    var ex=enemy.x-camX,ey=enemy.y;
-    if(ex>-50&&ex<player.x+player.w+50&&ey>player.y-40&&ey<player.y+player.h+40){
+    // Easier on level 1: keep eagle higher, smaller hitbox
+    var hitY=level===1?enemy.y+20:enemy.y-10;
+    var hitH=level===1?30:60;
+    var ex=enemy.x-camX;
+    if(ex>-50&&ex<player.x+player.w+50&&enemy.y>player.y-hitH&&enemy.y<player.y+player.h+hitH){
       endGame();return;
     }
     if(enemy.x<player.x-500){enemy.x=player.x+800+Math.random()*400;}
