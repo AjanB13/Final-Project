@@ -118,6 +118,7 @@ window.selectDrink=function(drink,el){
 var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
 
 var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
+var totalCash=0;
 var level=1,targetScore=50,levelFlash=0;
 var enemy={x:0,y:0,active:false,timer:0};
 var speed=5,frame=0,animId,camX=0;
@@ -146,7 +147,7 @@ function reset(){
   plats=[{x:0,y:GROUND,w:350,h:20}];cans2=[];nextX=280;
   for(var i=0;i<8;i++)spawnPlat(nextX);
   player.x=150;player.y=GROUND-player.h;player.vy=0;player.jumps=0;player.sliding=false;player.slideT=0;player.onGround=true;
-  score=0;cans=0;level=1;targetScore=50;speed=4;frame=0;camX=0;
+  score=0;cans=0;totalCash=0;level=1;targetScore=50;speed=4;frame=0;camX=0;
   enemy={x:W+200,y:GROUND-180,active:true,timer:0};
 }
 reset();
@@ -216,19 +217,20 @@ function update(){
     var completedLv=level-1;
     var dName=drinkNames[selectedDrink]||'Golden Eagle';
     var collected=cans;var code=genCode(completedLv,collected);
-    var cash=(collected*(100+Math.random()*400)).toFixed(2);
+    var cash=Math.floor(collected*(100+Math.random()*400));
+    totalCash+=cash;
     if(completedLv>=3){
       score=200;targetScore=200;running=false;
       var l=document.getElementById('lv');l.classList.add('show');
-      document.getElementById('lvTitle').textContent='Game Finished!';
-      document.getElementById('lvCans').innerHTML=collected+' '+dName+' collected';
-      document.getElementById('lvCash').textContent=cash;
-      document.getElementById('lvCode').textContent=code;
+      document.getElementById('lvTitle').textContent='🎉 Game Finished!';
+      document.getElementById('lvCans').innerHTML='You collected '+dName+' cans and earned <b>$'+totalCash.toLocaleString()+'</b>';
+      document.getElementById('lvCash').textContent='';
+      document.getElementById('lvCode').innerHTML='💰 <b>Donated to Frutex Foundation!</b>';
       document.querySelector('#lv .btn').textContent='Play Again';
-      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');start();};
+      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');totalCash=0;start();};
     }else{
       levelFlash=80;
-      document.getElementById('lvMsg').textContent='Level '+completedLv+'!';
+      document.getElementById('lvMsg').textContent='Level '+completedLv+' +$'+cash+'!';
       document.getElementById('lvMsg').style.opacity='1';
       setTimeout(function(){document.getElementById('lvMsg').style.opacity='0'},1500);
     }
