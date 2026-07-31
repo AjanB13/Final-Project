@@ -110,7 +110,7 @@ window.selectDrink=function(drink,el){
 var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
 
 var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
-var level=1,targetScore=250,levelFlash=0;
+var level=1,targetScore=100,levelFlash=0;
 var enemy={x:0,y:0,active:false,timer:0};
 var speed=5,frame=0,animId,camX=0;
 
@@ -138,7 +138,7 @@ function reset(){
   plats=[{x:0,y:GROUND,w:350,h:20}];cans2=[];nextX=280;
   for(var i=0;i<8;i++)spawnPlat(nextX);
   player.x=150;player.y=GROUND-player.h;player.vy=0;player.jumps=0;player.sliding=false;player.slideT=0;player.onGround=true;
-  score=0;cans=0;level=1;targetScore=250;speed=4;frame=0;camX=0;
+  score=0;cans=0;level=1;targetScore=100;speed=4;frame=0;camX=0;
   enemy={x:W+200,y:GROUND-180,active:true,timer:0};
 }
 reset();
