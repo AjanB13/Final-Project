@@ -204,6 +204,7 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
+  if(score>=targetScore){level++;targetScore+=250;}
 
   // Enemy eagle
   if(enemy.active){
@@ -300,14 +301,15 @@ function draw(){
   }
 
   // HUD
-  ctx.fillStyle='#fff';ctx.font='800 20px "Playfair Display",serif';ctx.textAlign='right';
-  ctx.fillText(score,W-14,26);
-  ctx.fillStyle='#f5c842';ctx.font='700 11px Inter';ctx.textAlign='right';
-  ctx.fillText('Level '+level+': '+score+'/'+targetScore,W-14,42);
-  ctx.fillStyle='#f5c842';ctx.font='600 9px Inter';ctx.textAlign='right';
-  ctx.fillText(cans+' collected',W-14,55);
+  // Level display
+  ctx.fillStyle='#e8743c';ctx.font='800 14px Inter';ctx.textAlign='left';
+  ctx.fillText('LEVEL '+level,14,28);
+  ctx.fillStyle='#fff';ctx.font='700 20px "Playfair Display",serif';ctx.textAlign='right';
+  ctx.fillText(score+' / '+targetScore,W-14,28);
+  ctx.fillStyle='#f5c842';ctx.font='600 10px Inter';ctx.textAlign='right';
+  ctx.fillText(cans+' collected',W-14,43);
   ctx.fillStyle='rgba(255,255,255,.2)';ctx.font='600 8px Inter';
-  ctx.fillText('BEST '+best,W-14,66);
+  ctx.fillText('BEST '+best,W-14,56);
 
   ctx.fillStyle='rgba(255,255,255,.1)';ctx.font='8px Inter';ctx.textAlign='center';
   ctx.fillText('SPACE jump(x2)  Auto-run',W/2,H-6);
