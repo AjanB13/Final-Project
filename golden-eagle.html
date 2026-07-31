@@ -7,12 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg-primary: #0a0a0f;
-      --bg-secondary: #111118;
-      --bg-card: #16161f;
-      --text-primary: #f0f0f0;
-      --text-secondary: #a0a0b0;
-      --text-muted: #6b6b7b;
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f3ee;
+      --bg-card: #ffffff;
+      --text-primary: #1a1a1a;
+      --text-secondary: #5a5a5a;
+      --text-muted: #8a8a8a;
       --gold: #d4a843;
       --gold-light: #e8c96a;
       --gold-dark: #b8922e;
@@ -39,10 +39,9 @@
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
-      background: rgba(10, 10, 15, 0.85);
+      background: rgba(255,255,255,0.92);
       backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
     .nav-inner {
       max-width: var(--max-width);
@@ -201,7 +200,7 @@
     }
     .flavour-card {
       background: var(--bg-card);
-      border: 1px solid rgba(255,255,255,0.06);
+      border: 1px solid rgba(0,0,0,0.05);
       border-radius: var(--radius-lg);
       padding: 2.5rem 2rem;
       text-align: center;
@@ -277,8 +276,8 @@
       font-size: 0.68rem;
       padding: 0.3rem 0.8rem;
       border-radius: 100px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(0,0,0,0.03);
+      border: 1px solid rgba(0,0,0,0.06);
       color: var(--text-muted);
       letter-spacing: 0.3px;
     }
@@ -304,11 +303,11 @@
       letter-spacing: 1.5px;
       color: var(--text-muted);
       padding: 0.8rem 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
     }
     .comparison td {
       padding: 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.04);
+      border-bottom: 1px solid rgba(0,0,0,0.04);
       font-size: 0.9rem;
       color: var(--text-secondary);
     }
@@ -343,7 +342,7 @@
 
     /* ── Footer ── */
     footer {
-      border-top: 1px solid rgba(255,255,255,0.06);
+      border-top: 1px solid rgba(0,0,0,0.06);
       padding: 3rem 2rem;
       text-align: center;
       color: var(--text-muted);
