@@ -204,7 +204,7 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
-  if(score>=targetScore){level++;targetScore=score+250;levelFlash=60;}
+  if(score>=targetScore){level++;targetScore=score+100;levelFlash=60;}
 
   // Enemy eagle
   if(enemy.active){
