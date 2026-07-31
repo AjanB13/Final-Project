@@ -211,7 +211,7 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
-  if(score>=targetScore){score=targetScore;level++;targetScore=score+(level===2?100:level===3?150:100);running=false;
+  if(score>=targetScore){level++;targetScore=score+(level===2?100:level===3?150:100);running=false;
     var completedLv=level-1;
     var l=document.getElementById('lv');l.classList.add('show');
     document.getElementById('lvNum').textContent=completedLv;
