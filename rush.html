@@ -80,8 +80,8 @@
       <button class="btn" onclick="start()">Run Again</button>
     </div>
     <div class="ov" id="lv">
-      <h2 id="lvTitle">Level 1 Completed!</h2>
-      <p class="lvl-sub" style="color:#f5c842;font-size:1rem;margin-bottom:.3rem">🥤 <span id="lvCans">0</span> <span id="lvDrink">Golden Eagle</span> collected</p>
+      <h2>Level <span id="lvNum">1</span> Completed!</h2>
+      <p style="color:#f5c842;font-size:1rem;margin-bottom:.3rem">🥤 <span id="lvCans">0</span> <span id="lvDrink">Golden Eagle</span> collected</p>
       <p style="color:#ccc;font-size:.75rem;margin-bottom:.3rem">Redemption Code: <span style="color:#f5c842;font-family:monospace" id="lvCode">—</span></p>
       <p style="color:#4caf50;font-size:.9rem;margin-bottom:1rem">💰 Earned: $<span id="lvCash">0.00</span></p>
       <button class="btn" onclick="resume()">Continue</button>
@@ -220,18 +220,7 @@ function update(){
     var collected=cans;var code=genCode(completedLv,collected);
     document.getElementById('lvCans').textContent=collected;
     document.getElementById('lvCode').textContent=code;
-    var cash=(collected*(100+Math.random()*400)).toFixed(2);
-    document.getElementById('lvCash').textContent=cash;
-    if(completedLv>=3){
-      document.getElementById('lvTitle').textContent='Game Finished!';
-      document.querySelector('#lv .lvl-sub').textContent='You collected '+collected+' '+dName+' and earned $'+cash;
-      document.querySelector('#lv .btn').textContent='Play Again';
-      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');start();};
-    }else{
-      document.getElementById('lvTitle').textContent='Level '+completedLv+' Completed!';
-      document.querySelector('#lv .btn').textContent='Continue';
-      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');running=true;};
-    }
+    document.getElementById('lvCash').textContent=(collected*(100+Math.random()*400)).toFixed(2);
     return;}
 
   // Enemy eagle
