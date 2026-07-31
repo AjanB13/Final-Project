@@ -9,9 +9,15 @@ var h='<button class="fx-btn" id="fxBtn">💬</button>';
 h+='<div class="fx-bx" id="fxBx"><div class="fx-hd">🥤 Frutex AI</div><div class="fx-bd" id="fxBd"></div><div class="fx-in"><input id="fxInp" placeholder="Ask about Frutex..." onkeypress="if(event.key===\'Enter\')window.fxSend()"><button id="fxSB" onclick="window.fxSend()">Send</button></div></div>';
 var d=document.createElement('div');d.innerHTML=h;document.body.appendChild(d);
 
-var AK='';fetch('apikey.txt').then(function(r){return r.text()}).then(function(k){AK=k.trim()});
-var C=[{role:'system',content:K}];
-var W=false;
+var AK='';var C=[{role:'system',content:K}];var W=false;var ready=false;
+
+// Load API key before allowing chat
+fetch('apikey.txt').then(function(r){return r.text()}).then(function(k){
+  AK=k.trim();ready=true;
+  console.log('Frutex Bot: API key loaded');
+}).catch(function(){
+  fxM('b','⚠️ Could not load API key. Make sure apikey.txt exists.');
+});
 
 document.getElementById('fxBtn').onclick=function(){
   var b=document.getElementById('fxBx');b.classList.toggle('opn');
@@ -25,25 +31,24 @@ function fxM(r,t){
 
 window.fxSend=function(){
   var inp=document.getElementById('fxInp'),t=inp.value.trim();
-  if(!t||W)return;inp.value='';
-  inp.disabled=true;document.getElementById('fxSB').disabled=true;
-  fxM('u','<span class="ld"></span><span class="ld"></span><span class="ld"></span>');W=true;
+  if(!t||W)return;
+  if(!ready){fxM('b','⏳ Loading... please wait a moment and try again.');return}
+  inp.value='';inp.disabled=true;document.getElementById('fxSB').disabled=true;
+  var ld=fxM('u','<span class="ld"></span><span class="ld"></span><span class="ld"></span>');W=true;
   C.push({role:'user',content:t});
   fetch('https://openrouter.ai/api/v1/chat/completions',{
     method:'POST',
     headers:{'Authorization':'Bearer '+AK,'Content-Type':'application/json','HTTP-Referer':'https://frutex.com','X-Title':'Frutex Bot'},
-    body:JSON.stringify({model:'google/gemini-2.0-flash-001',messages:C.slice(-8)})
+    body:JSON.stringify({model:'openai/gpt-3.5-turbo',messages:C.slice(-8)})
   }).then(function(r){return r.json()}).then(function(j){
-    var rep=j.choices?j.choices[0].message.content:'Sorry, try again.';
+    var rep=j.choices?j.choices[0].message.content:('API error: '+(j.error?j.error.message:'unknown'));
     C.push({role:'assistant',content:rep});
-    var bd=document.getElementById('fxBd'),lds=bd.querySelectorAll('.m.u:last-child');
-    if(lds.length)bd.removeChild(lds[lds.length-1]);
+    var bd=document.getElementById('fxBd');if(ld.parentNode)bd.removeChild(ld);
     fxM('b',rep.replace(/\n/g,'<br>'));
     W=false;inp.disabled=false;document.getElementById('fxSB').disabled=false;inp.focus();
-  }).catch(function(){
-    var bd=document.getElementById('fxBd'),lds=bd.querySelectorAll('.m.u:last-child');
-    if(lds.length)bd.removeChild(lds[lds.length-1]);
-    fxM('b','Connection error. Try again.');
+  }).catch(function(e){
+    var bd=document.getElementById('fxBd');if(ld.parentNode)bd.removeChild(ld);
+    fxM('b','⚠️ Network error. Check your connection.<br><small>'+e.message+'</small>');
     W=false;inp.disabled=false;document.getElementById('fxSB').disabled=false;
   });
 };
