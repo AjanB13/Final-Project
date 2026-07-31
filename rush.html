@@ -76,7 +76,7 @@
     </div>
     <div class="ov" id="oe">
       <h2>Game Over</h2>
-      <p class="sub">Score: <span id="fs">0</span> &nbsp; <span id="drinkLabel">Golden Eagle</span>: <span id="fc">0</span></p>
+      <p class="sub">Score: <span id="fs">0</span> &nbsp; <span id="drinkLabel">Golden Eagle</span>: <span id="fc">0</span> &nbsp; ⚡<span id="levelLabel">Level 1</span></p>
       <button class="btn" onclick="start()">Run Again</button>
     </div>
   </div>
@@ -321,7 +321,7 @@ function endGame(){
   running=false;
   var fs=score+cans*10;
   if(fs>best){best=fs;localStorage.setItem('parkBest',best)}
-  fsEl.textContent=fs+' (Level '+level+')';fcEl.textContent=cans;
+  fsEl.textContent=fs;document.getElementById('levelLabel').textContent='Level '+level;fcEl.textContent=cans;
   oe.classList.add('show');
 }
 
