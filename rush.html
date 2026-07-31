@@ -48,6 +48,7 @@
   <div class="hdr"><h1>Frutex Game</h1><p>Jump across rooftops and collect drinks!</p></div>
   <div class="gc" style="width:100%;max-width:960px">
     <canvas id="g"></canvas>
+    <div id="lvMsg" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:900;color:#f5c842;text-shadow:0 0 20px rgba(245,196,66,.5);opacity:0;transition:opacity .3s;pointer-events:none;z-index:10">Level 2!</div>
     <div class="ov show" id="os">
       <h2>Choose Your Drink</h2>
       <div id="drinkSelect" style="display:flex;gap:1rem;justify-content:center;margin-bottom:1.2rem;flex-wrap:wrap;">
@@ -211,29 +212,26 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
-  if(score>=targetScore){level++;targetScore=score+(level===2?50:level===3?100:50);running=false;
+  if(score>=targetScore){level++;targetScore=score+(level===2?50:level===3?100:50);
     var completedLv=level-1;
-    var l=document.getElementById('lv');l.classList.add('show');
-    document.getElementById('lvNum').textContent=completedLv;
     var dName=drinkNames[selectedDrink]||'Golden Eagle';
     var collected=cans;var code=genCode(completedLv,collected);
     var cash=(collected*(100+Math.random()*400)).toFixed(2);
     if(completedLv>=3){
-      score=200;targetScore=200;
+      score=200;targetScore=200;running=false;
+      var l=document.getElementById('lv');l.classList.add('show');
       document.getElementById('lvTitle').textContent='Game Finished!';
-      document.getElementById('lvCash').textContent=cash;
       document.getElementById('lvCans').innerHTML=collected+' '+dName+' collected';
+      document.getElementById('lvCash').textContent=cash;
+      document.getElementById('lvCode').textContent=code;
       document.querySelector('#lv .btn').textContent='Play Again';
       document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');start();};
     }else{
-      document.getElementById('lvTitle').textContent='Level '+completedLv+' Completed!';
-      document.getElementById('lvCans').textContent=collected;
-      document.getElementById('lvCash').textContent=cash;
-      document.querySelector('#lv .btn').textContent='Continue';
-      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');running=true;};
+      levelFlash=80;
+      document.getElementById('lvMsg').textContent='Level '+completedLv+'!';
+      document.getElementById('lvMsg').style.opacity='1';
+      setTimeout(function(){document.getElementById('lvMsg').style.opacity='0'},1500);
     }
-    document.getElementById('lvDrink').textContent=dName;
-    document.getElementById('lvCode').textContent=code;
     return;}
 
   // Enemy eagle
