@@ -80,8 +80,10 @@
       <button class="btn" onclick="start()">Run Again</button>
     </div>
     <div class="ov" id="lv">
-      <h2>Level <span id="lvNum">2</span></h2>
-      <p style="color:#ccc;font-size:.85rem;margin-bottom:1rem">Complete! Next challenge ready.</p>
+      <h2>Level <span id="lvNum">2</span> Complete!</h2>
+      <p style="color:#f5c842;font-size:1rem;margin-bottom:.3rem">🥤 <span id="lvCans">0</span> Golden Eagles collected</p>
+      <p style="color:#ccc;font-size:.75rem;margin-bottom:.3rem">Redemption Code: <span style="color:#f5c842;font-family:monospace" id="lvCode">—</span></p>
+      <p style="color:#4caf50;font-size:.9rem;margin-bottom:1rem">💰 Earned: $<span id="lvCash">0.00</span></p>
       <button class="btn" onclick="resume()">Continue</button>
     </div>
   </div>
@@ -209,7 +211,14 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
-  if(score>=targetScore){level++;targetScore=score+100;running=false;document.getElementById('lv').classList.add('show');document.getElementById('lvNum').textContent=level;return;}
+  if(score>=targetScore){level++;targetScore=score+100;running=false;
+    var l=document.getElementById('lv');l.classList.add('show');
+    document.getElementById('lvNum').textContent=level;
+    var collected=cans;var code=genCode(level,collected);
+    document.getElementById('lvCans').textContent=collected;
+    document.getElementById('lvCode').textContent=code;
+    document.getElementById('lvCash').textContent=(collected*0.50).toFixed(2);
+    return;}
 
   // Enemy eagle
   if(enemy.active){
@@ -332,6 +341,12 @@ function draw(){
 
 function loop(){if(!running){animId=requestAnimationFrame(loop);return}update();draw();animId=requestAnimationFrame(loop)}
 window.resume=function(){document.getElementById('lv').classList.remove('show');running=true;};
+
+function genCode(lv,cans){
+  var c='FRUTEX-'+lv+'-';
+  for(var i=0;i<8;i++)c+='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[Math.floor(Math.random()*36)];
+  return c;
+}
 
 function endGame(){
   running=false;
