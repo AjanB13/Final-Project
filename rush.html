@@ -79,6 +79,11 @@
       <p class="sub">Score: <span id="fs">0</span> &nbsp; <span id="drinkLabel">Golden Eagle</span>: <span id="fc">0</span> &nbsp; ⚡<span id="levelLabel">Level 1</span></p>
       <button class="btn" onclick="start()">Run Again</button>
     </div>
+    <div class="ov" id="lv">
+      <h2>Level <span id="lvNum">2</span></h2>
+      <p style="color:#ccc;font-size:.85rem;margin-bottom:1rem">Complete! Next challenge ready.</p>
+      <button class="btn" onclick="resume()">Continue</button>
+    </div>
   </div>
   <p style="font-size:.58rem;color:#555;margin-top:.4rem">Auto-run &bull; SPACE jump &bull; SPACE x2 = double jump &bull; click to play</p>
 </div>
@@ -204,7 +209,7 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
-  if(score>=targetScore){level++;targetScore=score+100;levelFlash=60;}
+  if(score>=targetScore){level++;targetScore=score+100;running=false;document.getElementById('lv').classList.add('show');document.getElementById('lvNum').textContent=level;return;}
 
   // Enemy eagle
   if(enemy.active){
@@ -325,7 +330,8 @@ function draw(){
   ctx.fillText('SPACE jump(x2)  Auto-run',W/2,H-6);
 }
 
-function loop(){update();draw();animId=requestAnimationFrame(loop)}
+function loop(){if(!running){animId=requestAnimationFrame(loop);return}update();draw();animId=requestAnimationFrame(loop)}
+window.resume=function(){document.getElementById('lv').classList.remove('show');running=true;};
 
 function endGame(){
   running=false;
@@ -336,7 +342,7 @@ function endGame(){
 }
 
 window.start=function(){
-  reset();os.classList.remove('show');oe.classList.remove('show');
+  reset();os.classList.remove('show');oe.classList.remove('show');document.getElementById('lv').classList.remove('show');
   document.getElementById('drinkLabel').textContent=drinkNames[selectedDrink];
   running=true;if(animId)cancelAnimationFrame(animId);loop();
 };
