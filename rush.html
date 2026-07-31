@@ -80,7 +80,7 @@
       <button class="btn" onclick="start()">Run Again</button>
     </div>
     <div class="ov" id="lv">
-      <h2>Level <span id="lvNum">1</span> Completed!</h2>
+      <h2 id="lvTitle">Level <span id="lvNum">1</span> Completed!</h2>
       <p style="color:#f5c842;font-size:1rem;margin-bottom:.3rem">🥤 <span id="lvCans">0</span> <span id="lvDrink">Golden Eagle</span> collected</p>
       <p style="color:#ccc;font-size:.75rem;margin-bottom:.3rem">Redemption Code: <span style="color:#f5c842;font-family:monospace" id="lvCode">—</span></p>
       <p style="color:#4caf50;font-size:.9rem;margin-bottom:1rem">💰 Earned: $<span id="lvCash">0.00</span></p>
@@ -216,11 +216,24 @@ function update(){
     var l=document.getElementById('lv');l.classList.add('show');
     document.getElementById('lvNum').textContent=completedLv;
     var dName=drinkNames[selectedDrink]||'Golden Eagle';
-    document.getElementById('lvDrink').textContent=dName;
     var collected=cans;var code=genCode(completedLv,collected);
-    document.getElementById('lvCans').textContent=collected;
+    var cash=(collected*(100+Math.random()*400)).toFixed(2);
+    if(completedLv>=3){
+      score=200;targetScore=200;
+      document.getElementById('lvTitle').textContent='Game Finished!';
+      document.getElementById('lvCash').textContent=cash;
+      document.getElementById('lvCans').innerHTML=collected+' '+dName+' collected';
+      document.querySelector('#lv .btn').textContent='Play Again';
+      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');start();};
+    }else{
+      document.getElementById('lvTitle').textContent='Level '+completedLv+' Completed!';
+      document.getElementById('lvCans').textContent=collected;
+      document.getElementById('lvCash').textContent=cash;
+      document.querySelector('#lv .btn').textContent='Continue';
+      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');running=true;};
+    }
+    document.getElementById('lvDrink').textContent=dName;
     document.getElementById('lvCode').textContent=code;
-    document.getElementById('lvCash').textContent=(collected*(100+Math.random()*400)).toFixed(2);
     return;}
 
   // Enemy eagle
