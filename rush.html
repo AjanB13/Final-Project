@@ -110,7 +110,7 @@ window.selectDrink=function(drink,el){
 var oe=document.getElementById('oe'),os=document.getElementById('os'),fsEl=document.getElementById('fs'),fcEl=document.getElementById('fc');
 
 var running=false,score=0,cans=0,best=parseInt(localStorage.getItem('parkBest')||'0',10);
-var level=1,targetScore=250;
+var level=1,targetScore=250,levelFlash=0;
 var enemy={x:0,y:0,active:false,timer:0};
 var speed=5,frame=0,animId,camX=0;
 
@@ -204,7 +204,7 @@ function update(){
   // Fall death
   if(player.y>GROUND+120){endGame();return}
   score=Math.floor(player.x/12);
-  if(score>=targetScore){level++;targetScore+=250;}
+  if(score>=targetScore){level++;targetScore=score+250;levelFlash=60;}
 
   // Enemy eagle
   if(enemy.active){
@@ -304,6 +304,16 @@ function draw(){
   // Level display
   ctx.fillStyle='#e8743c';ctx.font='900 18px "Playfair Display",serif';ctx.textAlign='left';
   ctx.fillText('Level '+level,16,32);
+  // Level up flash
+  if(levelFlash>0){
+    levelFlash--;
+    var alpha=levelFlash<30?levelFlash/30:1;
+    ctx.fillStyle='rgba(255,200,50,'+alpha*.5+')';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='rgba(255,255,255,'+alpha+')';
+    ctx.font='900 36px "Playfair Display",serif';ctx.textAlign='center';
+    ctx.fillText('LEVEL UP!',W/2,H/2-20);
+  }
   ctx.fillStyle='#fff';ctx.font='700 20px "Playfair Display",serif';ctx.textAlign='right';
   ctx.fillText(score+' / '+targetScore,W-14,28);
   ctx.fillStyle='#f5c842';ctx.font='600 10px Inter';ctx.textAlign='right';
