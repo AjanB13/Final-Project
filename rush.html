@@ -223,11 +223,15 @@ function update(){
       score=200;targetScore=200;running=false;
       var l=document.getElementById('lv');l.classList.add('show');
       document.getElementById('lvTitle').textContent='🎉 Game Finished!';
-      document.getElementById('lvCans').innerHTML='You collected '+dName+' cans and earned <b>$'+totalCash.toLocaleString()+'</b>';
+      document.getElementById('lvCans').innerHTML='You collected '+dName+' cans<br><b>Total earned: $'+totalCash.toLocaleString()+'</b>';
       document.getElementById('lvCash').textContent='';
-      document.getElementById('lvCode').innerHTML='💰 <b>Donated to Frutex Foundation!</b>';
-      document.querySelector('#lv .btn').textContent='Play Again';
-      document.querySelector('#lv .btn').onclick=function(){l.classList.remove('show');totalCash=0;start();};
+      document.getElementById('lvCode').innerHTML='<input id="donateAmt" type="number" min="0" max="'+totalCash+'" value="'+totalCash+'" style="width:120px;padding:6px;border:1px solid #ccc;border-radius:8px;text-align:center;font-size:.9rem"><br><small style="color:#888">Choose amount to donate</small>';
+      document.querySelector('#lv .btn').textContent='Donate & Play Again';
+      document.querySelector('#lv .btn').onclick=function(){
+        var amt=parseInt(document.getElementById('donateAmt').value)||0;
+        alert('Thank you! $'+amt.toLocaleString()+' donated to Frutex Foundation ❤️');
+        l.classList.remove('show');totalCash=0;start();
+      };
     }else{
       levelFlash=80;
       document.getElementById('lvMsg').textContent='Level '+completedLv+' +$'+cash+'!';
